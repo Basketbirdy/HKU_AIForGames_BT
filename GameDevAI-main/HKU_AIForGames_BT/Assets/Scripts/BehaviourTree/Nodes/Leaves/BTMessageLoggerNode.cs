@@ -24,13 +24,13 @@ public class BTMessageLoggerNode : BTBaseNode
         switch (logType)
         {
             case LogType.DEFAULT:
-                Debug.Log(message);
+                Debug.Log($"[{blackboard.GetVariable<string>(VariableNames.OBJECT_NAME)}] {message}");
                 break;
             case LogType.WARNING:
-                Debug.LogWarning(message);
+                Debug.LogWarning($"[{blackboard.GetVariable<string>(VariableNames.OBJECT_NAME)}] {message}");
                 break;
             case LogType.ERROR: 
-                Debug.LogError(message);
+                Debug.LogError($"[{blackboard.GetVariable<string>(VariableNames.OBJECT_NAME)}] {message}");
                 break;
         }
 

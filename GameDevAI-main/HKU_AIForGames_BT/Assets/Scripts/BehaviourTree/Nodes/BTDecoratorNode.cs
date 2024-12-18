@@ -15,7 +15,7 @@ public abstract class BTDecoratorNode : BTBaseNode
 
     public override void SetupBlackboard(Blackboard _blackboard)
     {
-        base.SetupBlackboard(blackboard);
-        child.SetupBlackboard(blackboard);
+        base.SetupBlackboard(_blackboard);
+        child.SetupBlackboard(_blackboard);
     }
 }

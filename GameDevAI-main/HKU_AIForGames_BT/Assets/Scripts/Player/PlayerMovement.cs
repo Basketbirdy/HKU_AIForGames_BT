@@ -7,7 +7,6 @@ public class PlayerMovement : MonoBehaviour
     private float currentSpeed;
     [SerializeField] private float baseSpeed = 5f;
     [SerializeField] private float sprintMultiplier = 2.5f;
-    private float rotationSpeed = 25f;
 
     private KeyCode sprintKey = KeyCode.LeftShift;
 
@@ -15,19 +14,13 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
 
     // states
-    BTBaseNode tree;
 
-    [SerializeField]
+    //[SerializeField]
     private bool isMoving;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-
-        tree = new BTSequenceNode(
-            new BTMessageLoggerNode($"Hello, the tree works?"),
-            new BTMessageLoggerNode($"How is it going?", LogType.WARNING)
-            );
     }
 
     // Start is called before the first frame update
@@ -48,8 +41,6 @@ public class PlayerMovement : MonoBehaviour
     {
         Rotate();
         Move();
-
-        TaskStatus result = tree.Tick();
     }
 
     private void GetDirection()
@@ -73,16 +64,13 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isMoving) { return; }
 
-        Vector3 rotationTarget = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        rotationTarget.y = 0;
-
-        //float step = rotationSpeed * Time.deltaTime;
-        //Vector3 newDirection = Vector3.RotateTowards(transform.forward, rotationTarget, step, 0.0f);
         transform.rotation = Quaternion.LookRotation(direction);
     }
 
     private void Move()
     {
+        if(rb == null) { return; }
+
         rb.velocity = direction.normalized * currentSpeed;
     }
 }

@@ -12,7 +12,7 @@ public abstract class BTBaseNode
     protected Blackboard blackboard;        // stores all data for the behaviour tree
     private bool wasEntered = false;        // stores state of the node
 
-    public virtual void OnReset()           // called when tree is interrupted
+    public virtual void OnReset()           // TODO - What does OnReset do exactly, I think it is called when the tree is interrupted
     {
 
     }

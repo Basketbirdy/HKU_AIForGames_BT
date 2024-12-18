@@ -15,10 +15,10 @@ public abstract class BTCompositeNode : BTBaseNode
 
     public override void SetupBlackboard(Blackboard _blackboard)
     {
-        base.SetupBlackboard(blackboard);
+        base.SetupBlackboard(_blackboard);
         foreach(BTBaseNode node in children)
         {
-            node.SetupBlackboard(blackboard);
+            node.SetupBlackboard(_blackboard);
         }
     }
 }
