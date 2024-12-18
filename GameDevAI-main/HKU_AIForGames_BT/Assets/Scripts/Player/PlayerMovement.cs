@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
 
     // states
+    BTBaseNode tree;
 
     [SerializeField]
     private bool isMoving;
@@ -22,6 +23,11 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+
+        tree = new BTSequenceNode(
+            new BTMessageLoggerNode($"Hello, the tree works?"),
+            new BTMessageLoggerNode($"How is it going?", LogType.WARNING)
+            );
     }
 
     // Start is called before the first frame update
@@ -42,6 +48,8 @@ public class PlayerMovement : MonoBehaviour
     {
         Rotate();
         Move();
+
+        TaskStatus result = tree.Tick();
     }
 
     private void GetDirection()

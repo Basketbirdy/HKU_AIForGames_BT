@@ -1,0 +1,9 @@
+Creating a new leaf node (action)
+
+- Create a new class with the 'BT' prefix and have it inherit from BTBaseNode
+- override the base OnUpdate function with whatever functionality you might need
+- make sure the OnUpdate function always returns a resulting taskstate
+* override the base OnEnter and OnExit functions with whatever functionality you need  
+- Create a constructor with all the parameters you need to set 
+
+* = optional
