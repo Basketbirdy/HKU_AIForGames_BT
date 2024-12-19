@@ -8,12 +8,12 @@ public enum LogType { DEFAULT, WARNING, ERROR }
 /// Leaf node that debugs a provided message into the console
 /// <br>if no LogType provided defaults to normal Debug.Log instead</br>
 /// </summary>
-public class BTMessageLoggerNode : BTBaseNode
+public class BTDebugLogNode : BTBaseNode
 {
     private string message;
     private LogType logType;
 
-    public BTMessageLoggerNode(string _message, LogType _logType = LogType.DEFAULT)
+    public BTDebugLogNode(string _message, LogType _logType = LogType.DEFAULT)
     {
         message = _message;
         logType = _logType;

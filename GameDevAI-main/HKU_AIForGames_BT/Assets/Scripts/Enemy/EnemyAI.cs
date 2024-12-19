@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -9,10 +10,17 @@ public class EnemyAI : MonoBehaviour
 
     [SerializeField] private float walkSpeed;
     [SerializeField] private float sprintMultiplier;
+    private float reachingDistance = .55f;
 
+    private NavMeshAgent agent;
     [SerializeField] private Transform patrolWaypoints;
 
     private void Awake()
+    {
+        agent = GetComponent<NavMeshAgent>();
+    }
+
+    private void Start()
     {
         Blackboard blackboard = new Blackboard();
         blackboard.SetVariable<string>(VariableNames.OBJECT_NAME, gameObject.name);
@@ -24,40 +32,34 @@ public class EnemyAI : MonoBehaviour
         blackboard.SetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS, patrolPoints);
 
         tree = new BTSequenceNode(
-            new BTMessageLoggerNode($"----------------------"),                                 // should appear 
-            new BTMessageLoggerNode($"Hello, the tree works?"),                                 // should appear 
-            new BTWaitNode(2f),
-            new BTMessageLoggerNode($"How is it going?", LogType.WARNING),                      // should appear 
-            new BTWaitNode(2f),
+            new BTDebugLogNode($"----------------------"),                                 // should appear 
+            new BTDebugLogNode($"Hello, the tree works?"),                                 // should appear 
+            new BTDebugLogNode($"How is it going?", LogType.WARNING),                      // should appear 
             new BTSelectorNode(
                     new BTInverterNode(
-                            new BTMessageLoggerNode($"first, I think I should be here")         // should appear 
+                            new BTDebugLogNode($"first, I think I should be here")         // should appear 
                         ),
-                    new BTMessageLoggerNode($"second, I think I should be here"),               // should appear 
-                    new BTMessageLoggerNode($"Third, I am not supposed to be here")
+                    new BTDebugLogNode($"second, I think I should be here"),               // should appear 
+                    new BTDebugLogNode($"Third, I am not supposed to be here")
                 ),
             new BTWaitNode(2f),
-            new BTSequenceNode(
-                    new BTMessageLoggerNode($"{blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[0]}"),              // should appear 
-                    new BTMessageLoggerNode($"{blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[1]}"),              // should appear 
-                    //new BTInverterNode(
-                    //        new BTMessageLoggerNode($"{blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[2]}")       // should appear 
-                    //    ),
-                    new BTMessageLoggerNode($"{blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[3]}")
-                ),
-            new BTMoveTowardsNode(blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[0].position, .5f, transform),
-            new BTMoveTowardsNode(blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[1].position, .5f, transform),
-            new BTMoveTowardsNode(blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[2].position, .5f, transform),
-            new BTMoveTowardsNode(blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[3].position, .5f, transform),
-            new BTMessageLoggerNode($"----------------------")
+
+            new BTSetTargetPositionNode(blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[0].position),
+            new BTMoveToPositionNode(agent, reachingDistance),
+            new BTWaitNode(2f),
+            new BTSetTargetPositionNode(blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[1].position),
+            new BTMoveToPositionNode(agent, reachingDistance),
+            new BTWaitNode(2f),
+            new BTSetTargetPositionNode(blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[2].position),
+            new BTMoveToPositionNode(agent, reachingDistance),
+            new BTWaitNode(2f),
+            new BTSetTargetPositionNode(blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[3].position),
+            new BTMoveToPositionNode(agent, reachingDistance),
+            new BTWaitNode(2f),
+            new BTDebugLogNode($"----------------------")
             );
 
         tree.SetupBlackboard(blackboard);
-    }
-
-    private void Start()
-    {
-        
     }
 
     private void Update()

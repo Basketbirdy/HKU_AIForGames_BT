@@ -7,5 +7,6 @@ public static class VariableNames
     public const string MOVING_CURRENTSPEED = "CurrentSpeed";
 
     // pathfinding
-    public const string PATHING_WAYPOINTS = "PathingWaypoints";
+    public const string PATHING_TARGETPOSITION = "TargetPosition";
+    public const string PATHING_WAYPOINTS = "Waypoints";
 }
