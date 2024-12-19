@@ -8,5 +8,7 @@ public static class VariableNames
 
     // pathfinding
     public const string PATHING_TARGETPOSITION = "TargetPosition";
+    // waypoints
     public const string PATHING_WAYPOINTS = "Waypoints";
+    public const string PATHING_CURRENTWAYPOINT = "CurrentWaypoint";
 }

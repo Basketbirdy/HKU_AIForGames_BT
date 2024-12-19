@@ -40,4 +40,9 @@ public class BTMoveToPositionNode : BTBaseNode
         agent.stoppingDistance = reachingDistance;
         targetPosition = blackboard.GetVariable<Vector3>(VariableNames.PATHING_TARGETPOSITION);
     }
+
+    protected override void OnExit()
+    {
+        blackboard.SetVariable<Vector3>(VariableNames.PATHING_TARGETPOSITION, default);
+    }
 }

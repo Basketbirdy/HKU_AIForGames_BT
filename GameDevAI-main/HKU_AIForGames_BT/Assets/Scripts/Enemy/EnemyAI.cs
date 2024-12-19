@@ -6,7 +6,8 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
-    BTBaseNode tree;
+    BTBaseNode testingTree;
+    BTBaseNode patrolTree;
 
     [SerializeField] private float walkSpeed;
     [SerializeField] private float sprintMultiplier;
@@ -31,7 +32,7 @@ public class EnemyAI : MonoBehaviour
         Transform[] patrolPoints = patrolWaypoints.GetComponentsInChildren<Transform>();
         blackboard.SetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS, patrolPoints);
 
-        tree = new BTSequenceNode(
+        testingTree = new BTSequenceNode(
             new BTDebugLogNode($"----------------------"),                                 // should appear 
             new BTDebugLogNode($"Hello, the tree works?"),                                 // should appear 
             new BTDebugLogNode($"How is it going?", LogType.WARNING),                      // should appear 
@@ -44,31 +45,48 @@ public class EnemyAI : MonoBehaviour
                 ),
             new BTWaitNode(2f),
 
-            new BTSetTargetPositionNode(blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[0].position),
+            new BTSetBlackboardVariableNode<Vector3>(VariableNames.PATHING_TARGETPOSITION, blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[0].position),
             new BTMoveToPositionNode(agent, reachingDistance),
             new BTWaitNode(2f),
-            new BTSetTargetPositionNode(blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[1].position),
+            new BTSetBlackboardVariableNode<Vector3>(VariableNames.PATHING_TARGETPOSITION, blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[1].position),
             new BTMoveToPositionNode(agent, reachingDistance),
             new BTWaitNode(2f),
-            new BTSetTargetPositionNode(blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[2].position),
+            new BTSetBlackboardVariableNode<Vector3>(VariableNames.PATHING_TARGETPOSITION, blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[2].position),
             new BTMoveToPositionNode(agent, reachingDistance),
             new BTWaitNode(2f),
-            new BTSetTargetPositionNode(blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[3].position),
+            new BTSetBlackboardVariableNode<Vector3>(VariableNames.PATHING_TARGETPOSITION, blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[3].position),
             new BTMoveToPositionNode(agent, reachingDistance),
             new BTWaitNode(2f),
             new BTDebugLogNode($"----------------------")
             );
 
-        tree.SetupBlackboard(blackboard);
+
+        patrolTree = new BTSequenceNode(
+            new BTSetBlackboardVariableNode<Vector3>(VariableNames.PATHING_TARGETPOSITION, blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[0].position),
+            new BTMoveToPositionNode(agent, reachingDistance),
+            new BTWaitNode(2f),
+            new BTSetBlackboardVariableNode<Vector3>(VariableNames.PATHING_TARGETPOSITION, blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[1].position),
+            new BTMoveToPositionNode(agent, reachingDistance),
+            new BTWaitNode(2f),
+            new BTSetBlackboardVariableNode<Vector3>(VariableNames.PATHING_TARGETPOSITION, blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[2].position),
+            new BTMoveToPositionNode(agent, reachingDistance),
+            new BTWaitNode(2f),
+            new BTSetBlackboardVariableNode<Vector3>(VariableNames.PATHING_TARGETPOSITION, blackboard.GetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS)[3].position),
+            new BTMoveToPositionNode(agent, reachingDistance),
+            new BTWaitNode(2f)
+        );
+
+        testingTree.SetupBlackboard(blackboard);
+        patrolTree.SetupBlackboard(blackboard);
     }
 
     private void Update()
     {
-        
+
     }
 
     private void FixedUpdate()
     {
-        TaskStatus result = tree.Tick();
+        TaskStatus result = patrolTree.Tick();
     }
 }
