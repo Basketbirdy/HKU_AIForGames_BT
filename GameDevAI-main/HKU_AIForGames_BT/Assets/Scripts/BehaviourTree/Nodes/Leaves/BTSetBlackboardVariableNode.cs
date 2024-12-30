@@ -5,18 +5,36 @@ using UnityEngine;
 
 public class BTSetBlackboardVariableNode<T> : BTBaseNode
 {
-    private string variableToSet;
-    private T value;
+    private string variableToSetName;
+    private T newValue;
+    private string altNewValueName;
 
-    public BTSetBlackboardVariableNode(string _variableToSet, T _value)
+    public BTSetBlackboardVariableNode(string _variableToSetName, string _newValueVariableName)
     {
-        variableToSet = _variableToSet;
-        value = _value;
+        altNewValueName = default(string);
+
+        variableToSetName = _variableToSetName;
+        altNewValueName = _newValueVariableName;
+    }
+
+    public BTSetBlackboardVariableNode(string _variableToSetName, T _newValue)
+    {
+        altNewValueName = default(string);
+
+        variableToSetName = _variableToSetName;
+        newValue = _newValue;
     }
 
     protected override TaskStatus OnUpdate()
     {
-        blackboard.SetVariable<T>(variableToSet, value);
+        if(altNewValueName == default(string))
+        {
+            blackboard.SetVariable<T>(variableToSetName, newValue);
+        }
+        else
+        {
+            blackboard.SetVariable<T>(variableToSetName, blackboard.GetVariable<T>(altNewValueName));
+        }
         return TaskStatus.SUCCESS;
     }
 }
