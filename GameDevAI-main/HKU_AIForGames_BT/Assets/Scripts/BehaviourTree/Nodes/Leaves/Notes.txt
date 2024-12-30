@@ -7,3 +7,7 @@ Creating a new leaf node (action)
 - Create a constructor with all the parameters you need to set 
 
 * = optional
+
+
+// TODO - the currentindex on composite nodes aren't getting reset. because of this the tree doesn't run everything every time. 
+// Write a reactive sequence node - see https://www.behaviortree.dev/docs/nodes-library/sequencenode/#reactivesequence

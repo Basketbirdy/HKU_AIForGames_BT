@@ -38,11 +38,11 @@ public class BTMoveToPositionNode : BTBaseNode
     protected override void OnEnter()
     {
         agent.stoppingDistance = reachingDistance;
-        targetPosition = blackboard.GetVariable<Vector3>(VariableNames.PATHING_TARGETPOSITION);
+        targetPosition = blackboard.GetVariable<Transform>(VariableNames.PATHING_TARGETTRANSFORM).position;
     }
 
     protected override void OnExit()
     {
-        blackboard.SetVariable<Vector3>(VariableNames.PATHING_TARGETPOSITION, default);
+        blackboard.SetVariable<Transform>(VariableNames.PATHING_TARGETTRANSFORM, default);
     }
 }

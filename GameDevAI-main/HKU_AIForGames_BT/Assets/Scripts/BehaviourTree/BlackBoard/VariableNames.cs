@@ -7,8 +7,14 @@ public static class VariableNames
     public const string MOVING_CURRENTSPEED = "CurrentSpeed";
 
     // pathfinding
-    public const string PATHING_TARGETPOSITION = "TargetPosition";
+    public const string PATHING_TARGETTRANSFORM = "TargetTransform";
     // waypoints
-    public const string PATHING_WAYPOINTS = "Waypoints";
-    public const string PATHING_CURRENTWAYPOINT = "CurrentWaypoint";
+    public const string PATROL_WAYPOINTS = "Waypoints";
+    public const string PATROL_CURRENTWAYPOINT = "CurrentWaypoint";
+
+    // checks
+    public const string CHECK_CURRENTRANGE = "CurrentRange";
+
+    // stored data
+    public const string DATA_OBJECTSINRANGE = "ObjectsInRange"; 
 }

@@ -20,7 +20,7 @@ public class BTSetTargetToWaypointNode : BTBaseNode
 
         if(waypoints == null) { return TaskStatus.FAILURE; }
 
-        blackboard.SetVariable<Vector3>(VariableNames.PATHING_TARGETPOSITION, waypoints[newValue].position);
+        blackboard.SetVariable<Transform>(VariableNames.PATHING_TARGETTRANSFORM, waypoints[newValue]);
 
         return TaskStatus.SUCCESS;
     }

@@ -6,17 +6,24 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
-    BTBaseNode testingTree;
-
     BTBaseNode patrolTree;
-    BTBaseNode patrolPointTree;
+    BTBaseNode enemyTree;
 
+
+    [Header("General")]
     [SerializeField] private float walkSpeed;
     [SerializeField] private float sprintMultiplier;
-    private float reachingDistance = .55f;
 
     private NavMeshAgent agent;
+    private float reachingDistance = .55f;
+
+    [Header("Patrol")]
     [SerializeField] private Transform[] waypoints;
+
+    [Header("Player detection")]
+    [SerializeField] private float detectionRange;
+    [SerializeField] private LayerMask playerMask;
+    [SerializeField] private Transform player;
 
     private void Awake()
     {
@@ -31,18 +38,30 @@ public class EnemyAI : MonoBehaviour
         blackboard.SetVariable<float>(VariableNames.MOVING_CURRENTSPEED, walkSpeed);
 
         // get waypoints
-        blackboard.SetVariable<Transform[]>(VariableNames.PATHING_WAYPOINTS, waypoints);
+        blackboard.SetVariable<Transform[]>(VariableNames.PATROL_WAYPOINTS, waypoints);
+
+        blackboard.SetVariable<float>(VariableNames.CHECK_CURRENTRANGE, detectionRange);
 
         // tree setup
         patrolTree = new BTSequenceNode(
-            new BTSetTargetToWaypointNode(VariableNames.PATHING_WAYPOINTS, VariableNames.PATHING_CURRENTWAYPOINT),
+            new BTSetTargetToWaypointNode(VariableNames.PATROL_WAYPOINTS, VariableNames.PATROL_CURRENTWAYPOINT),
             new BTMoveToPositionNode(agent, reachingDistance),
             // TODO - Make enemy look around for 2 seconds, instead of waiting 2 seconds
             new BTWaitNode(2f),
-            new BTIncrementIndexNode<Transform>(VariableNames.PATHING_CURRENTWAYPOINT, VariableNames.PATHING_WAYPOINTS)
+            new BTIncrementIndexNode<Transform>(VariableNames.PATROL_CURRENTWAYPOINT, VariableNames.PATROL_WAYPOINTS)
         );
 
-        patrolTree.SetupBlackboard(blackboard);
+        enemyTree = new BTSequenceNode(
+                new BTSelectorNode(
+                    new BTSequenceNode(
+                            new BTCheckObjectInRangeNode(transform, playerMask),                                        // check for player
+                            new BTSetBlackboardVariableNode<Transform>(VariableNames.PATHING_TARGETTRANSFORM, player)   // TODO - ask about a better way to get player transform
+                        ),
+                    patrolTree           
+                    )
+            );
+
+        enemyTree.SetupBlackboard(blackboard);
     }
 
     private void Update()
@@ -52,7 +71,7 @@ public class EnemyAI : MonoBehaviour
 
     private void FixedUpdate()
     {
-        TaskStatus result = patrolTree.Tick();
+        TaskStatus result = enemyTree.Tick();
     }
 
         //testingTree = new BTSequenceNode(
