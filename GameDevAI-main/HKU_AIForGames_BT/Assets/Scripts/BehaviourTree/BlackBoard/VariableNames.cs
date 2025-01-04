@@ -16,5 +16,9 @@ public static class VariableNames
     public const string CHECK_CURRENTRANGE = "CurrentRange";
 
     // stored data
-    public const string DATA_OBJECTSINRANGE = "ObjectsInRange"; 
+    public const string DATA_ISPLAYERINRANGE = "IsPlayerInRange";
+    public const string DATA_HASWEAPON = "HasWeapon";
+
+    // timers
+    public const string TIMER_PLAYERSPOTTED = "PlayerSpottedTimer";
 }

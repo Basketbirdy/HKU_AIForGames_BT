@@ -11,3 +11,9 @@ Creating a new leaf node (action)
 
 // TODO - the currentindex on composite nodes aren't getting reset. because of this the tree doesn't run everything every time. 
 // Write a reactive sequence node - see https://www.behaviortree.dev/docs/nodes-library/sequencenode/#reactivesequence
+
+Questions
+- Im struggling with interupting the pathfinding when the player is within a certain range
+- What is the best way to return the player transform?
+- How do i interupt behaviour trees? 
+	Do i save the current node in a variable and then onexit tick that node again?

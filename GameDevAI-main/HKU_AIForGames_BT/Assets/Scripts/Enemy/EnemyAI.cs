@@ -1,18 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
-    BTBaseNode patrolTree;
+    // main behaviour tree
     BTBaseNode enemyTree;
 
+    // modular behaviour tree pieces
+    BTBaseNode playerCheckTree;
+    BTBaseNode weaponFindTree;
+    BTBaseNode patrolTree;
 
     [Header("General")]
     [SerializeField] private float walkSpeed;
     [SerializeField] private float sprintMultiplier;
+    [Space]
+    [SerializeField] private float interactRange;
 
     private NavMeshAgent agent;
     private float reachingDistance = .55f;
@@ -25,6 +32,12 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private LayerMask playerMask;
     [SerializeField] private Transform player;
 
+    [Header("Attacks")]
+    [SerializeField] private float attackRange;
+
+    [Header("Weapons")]
+    [SerializeField] private LayerMask weaponMask;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -33,35 +46,102 @@ public class EnemyAI : MonoBehaviour
     private void Start()
     {
         Blackboard blackboard = new Blackboard();
+        // characteristics & stats
         blackboard.SetVariable<string>(VariableNames.OBJECT_NAME, gameObject.name);
-
         blackboard.SetVariable<float>(VariableNames.MOVING_CURRENTSPEED, walkSpeed);
-
-        // get waypoints
+        // waypoints
         blackboard.SetVariable<Transform[]>(VariableNames.PATROL_WAYPOINTS, waypoints);
-
+        // detection
         blackboard.SetVariable<float>(VariableNames.CHECK_CURRENTRANGE, detectionRange);
+        // data
+        blackboard.SetVariable<bool>(VariableNames.DATA_ISPLAYERINRANGE, false);
 
         // tree setup
         patrolTree = new BTSequenceNode(
             new BTChangeDynamicTextNode($"State: Patrolling", transform),
             new BTSetTargetToWaypointNode(VariableNames.PATROL_WAYPOINTS, VariableNames.PATROL_CURRENTWAYPOINT),
-            new BTMoveToPositionNode(agent, reachingDistance),
-            // TODO - Make enemy look around for 2 seconds, instead of waiting 2 seconds
+            new BTSucceederNode(
+                new BTMoveToPositionNode(agent, reachingDistance)
+                ),
             new BTWaitNode(2f),
             new BTIncrementIndexNode<Transform>(VariableNames.PATROL_CURRENTWAYPOINT, VariableNames.PATROL_WAYPOINTS)
         );
 
-        enemyTree = new BTSequenceNode(
-                new BTSelectorNode(
+        playerCheckTree = new BTSelectorNode(
+                new BTSequenceNode(
+                    new BTChangeDynamicTextNode($"State: PlayerCheck", transform),
                     new BTSequenceNode(
-                            new BTChangeDynamicTextNode("State: Checking viscinity", transform),
-                            new BTCheckObjectInRangeNode(transform, playerMask),                                        // check for player
-                            new BTSetBlackboardVariableNode<Transform>(VariableNames.PATHING_TARGETTRANSFORM, player)   // TODO - ask about a better way to get player transform
-                        ),
-                    patrolTree           
+                        new BTCheckObjectInRangeNode(detectionRange, transform, playerMask)
+                        // TODO - Shoot raycast to player pos to check for walls
+                        // TODO - Reset player spotted timer
+                        // TODO - set player spotted to true in blackboard
+                    ),
+                    new BTSequenceNode(
+                        // TODO - check if the timer is finished
+                        // TODO - set player spotted to false
                     )
+                )
             );
+
+        weaponFindTree = new BTSelectorNode(
+            new BTSequenceNode(
+                new BTChangeDynamicTextNode($"State: FindWeapon", transform),
+                // TODO - Find a weapon
+                new BTSequenceNode(
+                    new BTCheckObjectInRangeNode(detectionRange, transform, weaponMask),
+                    new BTWaitNode(2f),                                                             // search for 2 seconds
+                    new BTSelectorNode(
+                        new BTSequenceNode(
+                            new BTCheckObjectInRangeNode(interactRange, transform, weaponMask),
+                            new BTInverterNode(
+                                new BTWaitNode(2f)
+                                )                                                        
+                            )
+                        // TODO - Approach the weapon
+                        )
+                    // TODO - Pick weapon up + despawn/disable weapon object
+                    )
+                // TODO - run away behaviour (fleeing)
+                )
+            );
+
+        enemyTree = new BTReactiveSequenceNode(
+            // TODO - Update timer node
+            new BTSelectorNode(
+                new BTInverterNode(
+                    new BTSucceederNode(
+                        playerCheckTree
+                        )
+                    ),
+                new BTSequenceNode(
+                    new BTSelectorNode(
+                        new BTCheckBlackboardVariableNode<bool>(VariableNames.TIMER_PLAYERSPOTTED, true),
+                        patrolTree
+                        ),
+                    new BTSelectorNode(
+                        new BTCheckBlackboardVariableNode<bool>(VariableNames.DATA_HASWEAPON, true),
+                        weaponFindTree
+                        ),
+                    new BTSelectorNode(
+                        new BTCheckObjectInRangeNode(attackRange, transform, playerMask)
+                        // TODO - set enemy target to player and move towards it
+                        )
+                    // TODO - Attack player
+                    )
+                )
+            );
+
+        //enemyTree = new BTReactiveSequenceNode(
+        //        new BTSelectorNode(
+        //            new BTSequenceNode(
+        //                    new BTChangeDynamicTextNode("State: Checking vicinity", transform),
+        //                    new BTCheckObjectInRangeNode(detectionRange, transform, playerMask),                                            // check for player
+        //                    new BTSetBlackboardVariableNode<Transform>(VariableNames.PATHING_TARGETTRANSFORM, player),      // TODO - ask about a better way to get player transform
+        //                    new BTMoveToPositionNode(agent, reachingDistance)
+        //                ),
+        //            patrolTree           
+        //            )
+        //    );
 
         enemyTree.SetupBlackboard(blackboard);
     }
