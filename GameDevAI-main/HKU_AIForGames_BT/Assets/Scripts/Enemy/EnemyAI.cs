@@ -44,6 +44,7 @@ public class EnemyAI : MonoBehaviour
 
         // tree setup
         patrolTree = new BTSequenceNode(
+            new BTChangeDynamicTextNode($"State: Patrolling", transform),
             new BTSetTargetToWaypointNode(VariableNames.PATROL_WAYPOINTS, VariableNames.PATROL_CURRENTWAYPOINT),
             new BTMoveToPositionNode(agent, reachingDistance),
             // TODO - Make enemy look around for 2 seconds, instead of waiting 2 seconds
@@ -54,6 +55,7 @@ public class EnemyAI : MonoBehaviour
         enemyTree = new BTSequenceNode(
                 new BTSelectorNode(
                     new BTSequenceNode(
+                            new BTChangeDynamicTextNode("State: Checking viscinity", transform),
                             new BTCheckObjectInRangeNode(transform, playerMask),                                        // check for player
                             new BTSetBlackboardVariableNode<Transform>(VariableNames.PATHING_TARGETTRANSFORM, player)   // TODO - ask about a better way to get player transform
                         ),
