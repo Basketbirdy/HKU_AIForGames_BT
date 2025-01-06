@@ -30,7 +30,7 @@ public class BTSequenceNode : BTCompositeNode
 
     protected override void OnEnter()
     {
-        currentIndex = 0;
+
     }
 
     protected override void OnExit()

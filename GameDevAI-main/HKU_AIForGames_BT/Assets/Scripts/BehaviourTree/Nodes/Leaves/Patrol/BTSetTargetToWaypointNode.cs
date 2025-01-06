@@ -18,7 +18,7 @@ public class BTSetTargetToWaypointNode : BTBaseNode
         Transform[] waypoints = blackboard.GetVariable<Transform[]>(waypointsVariableName);
         int newValue = blackboard.GetVariable<int>(indexVariableName);
 
-        if(waypoints == null) { return TaskStatus.FAILURE; }
+        if(waypoints.Length == 0) { return TaskStatus.FAILURE; }
 
         blackboard.SetVariable<Transform>(VariableNames.PATHING_TARGETTRANSFORM, waypoints[newValue]);
 
