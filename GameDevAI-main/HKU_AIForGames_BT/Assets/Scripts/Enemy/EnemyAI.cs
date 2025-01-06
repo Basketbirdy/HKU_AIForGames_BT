@@ -54,79 +54,95 @@ public class EnemyAI : MonoBehaviour
         // detection
         blackboard.SetVariable<float>(VariableNames.CHECK_CURRENTRANGE, detectionRange);
         // data
-        blackboard.SetVariable<bool>(VariableNames.DATA_ISPLAYERINRANGE, false);
+        blackboard.SetVariable<bool>(VariableNames.DATA_PLAYERSPOTTED, false);
+
+
+        // DEBUG
+        blackboard.SetVariable<bool>(VariableNames.DATA_HASWEAPON, true);
 
         // tree setup
-        patrolTree = new BTSequenceNode(
-            new BTChangeDynamicTextNode($"State: Patrolling", transform),
-            new BTSetTargetToWaypointNode(VariableNames.PATROL_WAYPOINTS, VariableNames.PATROL_CURRENTWAYPOINT),
-            new BTSucceederNode(
-                new BTMoveToPositionNode(agent, reachingDistance)
-                ),
-            new BTWaitNode(2f),
-            new BTIncrementIndexNode<Transform>(VariableNames.PATROL_CURRENTWAYPOINT, VariableNames.PATROL_WAYPOINTS)
+        patrolTree = 
+            new BTSequenceNode(
+                new BTChangeDynamicTextNode($"State: Patrolling", transform),
+                new BTSetTargetToWaypointNode(VariableNames.PATROL_WAYPOINTS, VariableNames.PATROL_CURRENTWAYPOINT),
+                new BTMoveToPositionNode(agent, reachingDistance),
+                new BTWaitNode(2f),
+                new BTIncrementIndexNode<Transform>(VariableNames.PATROL_CURRENTWAYPOINT, VariableNames.PATROL_WAYPOINTS)
         );
 
-        playerCheckTree = new BTSelectorNode(
+        playerCheckTree = 
+            new BTSelectorNode(
                 new BTSequenceNode(
                     new BTChangeDynamicTextNode($"State: PlayerCheck", transform),
-                    new BTSequenceNode(
-                        new BTCheckObjectInRangeNode(detectionRange, transform, playerMask)
-                        // TODO - Shoot raycast to player pos to check for walls
-                        // TODO - Reset player spotted timer
-                        // TODO - set player spotted to true in blackboard
-                    ),
-                    new BTSequenceNode(
-                        // TODO - check if the timer is finished
-                        // TODO - set player spotted to false
-                    )
-                )
-            );
-
-        weaponFindTree = new BTSelectorNode(
-            new BTSequenceNode(
-                new BTChangeDynamicTextNode($"State: FindWeapon", transform),
-                // TODO - Find a weapon
-                new BTSequenceNode(
-                    new BTCheckObjectInRangeNode(detectionRange, transform, weaponMask),
-                    new BTWaitNode(2f),                                                             // search for 2 seconds
                     new BTSelectorNode(
                         new BTSequenceNode(
-                            new BTCheckObjectInRangeNode(interactRange, transform, weaponMask),
-                            new BTInverterNode(
-                                new BTWaitNode(2f)
-                                )                                                        
-                            )
-                        // TODO - Approach the weapon
+                            new BTCheckObjectInRangeNode(detectionRange, transform, playerMask),
+                            // TODO - Shoot raycast to player pos to check for walls
+                            // TODO - Reset player spotted timer
+                            // TODO - set player spotted to true in blackboard
+                            new BTSetBlackboardVariableNode<bool>(VariableNames.DATA_PLAYERSPOTTED, true)
+                        ),
+                        new BTSequenceNode(
+                            // TODO - check if the timer is finished
+                            // TODO - set player spotted to false
+                            new BTSetBlackboardVariableNode<bool>(VariableNames.DATA_PLAYERSPOTTED, false)
                         )
-                    // TODO - Pick weapon up + despawn/disable weapon object
                     )
-                // TODO - run away behaviour (fleeing)
                 )
             );
 
-        enemyTree = new BTReactiveSequenceNode(
-            // TODO - Update timer node
+        weaponFindTree = 
             new BTSelectorNode(
-                new BTInverterNode(
-                    new BTSucceederNode(
-                        playerCheckTree
-                        )
-                    ),
                 new BTSequenceNode(
-                    new BTSelectorNode(
-                        new BTCheckBlackboardVariableNode<bool>(VariableNames.TIMER_PLAYERSPOTTED, true),
-                        patrolTree
-                        ),
-                    new BTSelectorNode(
-                        new BTCheckBlackboardVariableNode<bool>(VariableNames.DATA_HASWEAPON, true),
-                        weaponFindTree
-                        ),
-                    new BTSelectorNode(
-                        new BTCheckObjectInRangeNode(attackRange, transform, playerMask)
-                        // TODO - set enemy target to player and move towards it
+                    new BTDebugLogNode($"Finding weapon"),
+                    new BTChangeDynamicTextNode($"State: FindWeapon", transform),
+                    // TODO - Find a weapon
+                    new BTSequenceNode(
+                        new BTCheckObjectInRangeNode(detectionRange, transform, weaponMask),
+                        new BTWaitNode(2f),                                                             // search for 2 seconds
+                        new BTSelectorNode(
+                            new BTSequenceNode(
+                                new BTCheckObjectInRangeNode(interactRange, transform, weaponMask),
+                                new BTInverterNode(
+                                    new BTWaitNode(2f)
+                                )                                                        
+                            )
+                            // TODO - Approach the weapon
                         )
-                    // TODO - Attack player
+                        // TODO - Pick weapon up + despawn/disable weapon object
+                    )
+                    // TODO - run away behaviour (fleeing)
+                )
+            );
+
+        enemyTree = 
+            new BTReactiveSequenceNode(
+                //TODO - Update timer node
+                new BTDebugLogNode($"Updating timers"),
+                new BTSelectorNode(
+                    new BTInverterNode(
+                        new BTSucceederNode(
+                            playerCheckTree
+                            )
+                        ),
+                new BTSelectorNode(
+                    new BTSequenceNode(
+                        new BTCheckBlackboardVariableNode<bool>(VariableNames.DATA_PLAYERSPOTTED, true),
+                        new BTSelectorNode(
+                            new BTCheckBlackboardVariableNode<bool>(VariableNames.DATA_HASWEAPON, true),
+                            weaponFindTree
+                                ),
+                        new BTSelectorNode(
+                            new BTSequenceNode(
+                                new BTCheckObjectInRangeNode(attackRange, transform, playerMask),
+                                 //TODO - Attack player
+                                new BTDebugLogNode($"Attack time")
+                                ),
+                             //TODO - set enemy target to player and move towards it
+                            new BTDebugLogNode($"Move/chase to player")
+                            )
+                        ),
+                    patrolTree
                     )
                 )
             );
@@ -139,7 +155,7 @@ public class EnemyAI : MonoBehaviour
         //                    new BTSetBlackboardVariableNode<Transform>(VariableNames.PATHING_TARGETTRANSFORM, player),      // TODO - ask about a better way to get player transform
         //                    new BTMoveToPositionNode(agent, reachingDistance)
         //                ),
-        //            patrolTree           
+        //            patrolTree
         //            )
         //    );
 

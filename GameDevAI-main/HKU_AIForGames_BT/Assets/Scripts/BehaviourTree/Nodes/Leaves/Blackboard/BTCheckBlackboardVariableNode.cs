@@ -19,11 +19,11 @@ public class BTCheckBlackboardVariableNode<T> : BTBaseNode where T : struct
 
         if(value.Equals(desiredValue))
         {
-            Debug.Log($"value: {value} is equal to desiredValue: {desiredValue}");
+            Debug.Log($"{variableToCheckName}; value: {value} is equal to desiredValue: {desiredValue}");
             return TaskStatus.SUCCESS;
         }
 
-        Debug.Log($"value: {value} is NOT equal to desiredValue: {desiredValue}");
+        Debug.Log($"{variableToCheckName}; value: {value} is NOT equal to desiredValue: {desiredValue}");
         return TaskStatus.FAILURE;
     }
 }
