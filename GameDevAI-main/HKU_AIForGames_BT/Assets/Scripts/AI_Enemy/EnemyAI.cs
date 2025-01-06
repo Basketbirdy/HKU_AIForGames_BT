@@ -58,7 +58,7 @@ public class EnemyAI : MonoBehaviour
 
 
         // DEBUG
-        blackboard.SetVariable<bool>(VariableNames.DATA_HASWEAPON, true);
+        blackboard.SetVariable<bool>(VariableNames.DATA_HASWEAPON, false);
 
         // tree setup
         patrolTree = 
@@ -81,12 +81,14 @@ public class EnemyAI : MonoBehaviour
                             // TODO - Shoot raycast to player pos to check for walls
                             // TODO - Reset player spotted timer
                             // TODO - set player spotted to true in blackboard
-                            new BTSetBlackboardVariableNode<bool>(VariableNames.DATA_PLAYERSPOTTED, true)
+                            new BTSetBlackboardVariableNode<bool>(VariableNames.DATA_PLAYERSPOTTED, true),
+                            new BTDebugLogNode($"Player found")
                         ),
                         new BTSequenceNode(
                             // TODO - check if the timer is finished
                             // TODO - set player spotted to false
-                            new BTSetBlackboardVariableNode<bool>(VariableNames.DATA_PLAYERSPOTTED, false)
+                            new BTSetBlackboardVariableNode<bool>(VariableNames.DATA_PLAYERSPOTTED, false),
+                            new BTDebugLogNode($"Player NOT found")
                         )
                     )
                 )
@@ -100,26 +102,29 @@ public class EnemyAI : MonoBehaviour
                     // TODO - Find a weapon
                     new BTSequenceNode(
                         new BTCheckObjectInRangeNode(detectionRange, transform, weaponMask),
-                        new BTWaitNode(2f),                                                             // search for 2 seconds
+                        new BTWaitNode(.5f),                                                             // search for 2 seconds
                         new BTSelectorNode(
                             new BTSequenceNode(
-                                new BTCheckObjectInRangeNode(interactRange, transform, weaponMask),
-                                new BTInverterNode(
-                                    new BTWaitNode(2f)
-                                )                                                        
-                            )
+                                new BTCheckObjectInRangeNode(interactRange, transform, weaponMask)                                             
+                            ),
                             // TODO - Approach the weapon
-                        )
+                            new BTDebugLogNode($"Approaching weapons"),
+                            new BTWaitNode(.5f)
+                        ),
                         // TODO - Pick weapon up + despawn/disable weapon object
-                    )
+                        new BTDebugLogNode($"picking up weapon"),
+                        new BTWaitNode(.5f),
+                        new BTSetBlackboardVariableNode<bool>(VariableNames.DATA_HASWEAPON, true)
+                    ),
                     // TODO - run away behaviour (fleeing)
+                    new BTDebugLogNode($"Fleeing")
                 )
             );
 
         enemyTree = 
             new BTReactiveSequenceNode(
                 //TODO - Update timer node
-                new BTDebugLogNode($"Updating timers"),
+                //new BTDebugLogNode($"Updating timers"),
                 new BTSelectorNode(
                     new BTInverterNode(
                         new BTSucceederNode(
@@ -137,6 +142,7 @@ public class EnemyAI : MonoBehaviour
                             new BTSequenceNode(
                                 new BTCheckObjectInRangeNode(attackRange, transform, playerMask),
                                  //TODO - Attack player
+                                new BTChangeDynamicTextNode($"State: Attacking", transform),
                                 new BTDebugLogNode($"Attack time")
                                 ),
                              //TODO - set enemy target to player and move towards it
