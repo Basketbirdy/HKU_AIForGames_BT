@@ -65,7 +65,7 @@ public class EnemyAI : MonoBehaviour
             new BTSequenceNode(
                 new BTChangeDynamicTextNode($"State: Patrolling", transform),
                 new BTSetTargetToWaypointNode(VariableNames.PATROL_WAYPOINTS, VariableNames.PATROL_CURRENTWAYPOINT),
-                new BTMoveToPositionNode(agent, reachingDistance),
+                new BTMoveToPositionNode(agent, reachingDistance, VariableNames.PATHING_TARGETTRANSFORM),
                 new BTWaitNode(2f),
                 new BTChangeDynamicTextNode($"State: Waiting", transform),
                 new BTIncrementIndexNode<Transform>(VariableNames.PATROL_CURRENTWAYPOINT, VariableNames.PATROL_WAYPOINTS)
@@ -77,7 +77,7 @@ public class EnemyAI : MonoBehaviour
                     new BTChangeDynamicTextNode($"State: PlayerCheck", transform),
                     new BTSelectorNode(
                         new BTSequenceNode(
-                            new BTCheckObjectInRangeNode(detectionRange, transform, playerMask),
+                            new BTFindObjectNode(transform, detectionRange, playerMask),
                             // TODO - Shoot raycast to player pos to check for walls
                             // TODO - Reset player spotted timer
                             // TODO - set player spotted to true in blackboard
@@ -101,11 +101,11 @@ public class EnemyAI : MonoBehaviour
                     new BTChangeDynamicTextNode($"State: FindWeapon", transform),
                     // TODO - Find a weapon
                     new BTSequenceNode(
-                        new BTCheckObjectInRangeNode(detectionRange, transform, weaponMask),
+                        new BTFindObjectNode(transform, detectionRange, weaponMask),
                         new BTWaitNode(.5f),                                                             // search for 2 seconds
                         new BTSelectorNode(
                             new BTSequenceNode(
-                                new BTCheckObjectInRangeNode(interactRange, transform, weaponMask)                                             
+                                new BTFindObjectNode(transform, interactRange, weaponMask)                                             
                             ),
                             // TODO - Approach the weapon
                             new BTDebugLogNode($"Approaching weapons"),
@@ -140,7 +140,7 @@ public class EnemyAI : MonoBehaviour
                                 ),
                         new BTSelectorNode(
                             new BTSequenceNode(
-                                new BTCheckObjectInRangeNode(attackRange, transform, playerMask),
+                                new BTFindObjectNode(transform, attackRange, playerMask),
                                  //TODO - Attack player
                                 new BTChangeDynamicTextNode($"State: Attacking", transform),
                                 new BTDebugLogNode($"Attack time")

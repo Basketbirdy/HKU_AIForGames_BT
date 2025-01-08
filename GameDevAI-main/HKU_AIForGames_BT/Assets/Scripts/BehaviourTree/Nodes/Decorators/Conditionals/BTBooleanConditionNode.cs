@@ -9,13 +9,13 @@ public class BTBooleanConditionNode : BTConditionDecoratorNode
     bool variable;
     bool compareValue;
 
-    public BTBooleanConditionNode(BTBaseNode _child, string _variableName, bool _compareValue) : base(_child) 
+    public BTBooleanConditionNode(string _variableName, bool _compareValue, BTBaseNode _child) : base(_child) 
     {
         variableName = _variableName;
         compareValue = _compareValue;
     }
 
-    public BTBooleanConditionNode(BTBaseNode _child, bool _variable, bool _compareValue) : base(_child)
+    public BTBooleanConditionNode(bool _variable, bool _compareValue, BTBaseNode _child) : base(_child)
     {
         variable = _variable;
         compareValue = _compareValue;

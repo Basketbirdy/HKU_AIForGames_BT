@@ -19,6 +19,10 @@ public static class VariableNames
     public const string DATA_PLAYERSPOTTED = "PlayerSpottedData";
     public const string DATA_HASWEAPON = "HasWeapon";
 
+    public const string DATA_GETTINGATTACKED = "GettingAttackedData";
+
+    public const string DATA_FOUNDOBJECT = "FoundObjectData";
+
     // timers
     public const string TIMER_PLAYERSPOTTED = "PlayerSpottedTimer";
 }

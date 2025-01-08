@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AllyAI : MonoBehaviour
+public class TestAI : MonoBehaviour
 {
     BTBaseNode allyTree;
 
@@ -36,7 +36,7 @@ public class AllyAI : MonoBehaviour
             new BTSequenceNode(
                 new BTChangeDynamicTextNode($"State: Patrolling", transform),
                 new BTSetTargetToWaypointNode(VariableNames.PATROL_WAYPOINTS, VariableNames.PATROL_CURRENTWAYPOINT),
-                new BTMoveToPositionNode(agent, reachingDistance),
+                new BTMoveToPositionNode(agent, reachingDistance, VariableNames.PATHING_TARGETTRANSFORM),
                 new BTChangeDynamicTextNode($"State: Waiting", transform),
                 new BTWaitNode(2f),
                 new BTIncrementIndexNode<Transform>(VariableNames.PATROL_CURRENTWAYPOINT, VariableNames.PATROL_WAYPOINTS)
@@ -52,13 +52,13 @@ public class AllyAI : MonoBehaviour
                     )
                 );
 
-        //allyTree.SetupBlackboard(blackboard);
-        reactiveTest.SetupBlackboard(blackboard);
+        allyTree.SetupBlackboard(blackboard);
+        //reactiveTest.SetupBlackboard(blackboard);
     }
 
     private void FixedUpdate()
     {
-        //TaskStatus result = allyTree.Tick();
-        TaskStatus results = reactiveTest.Tick();
+        TaskStatus result = allyTree.Tick();
+        //TaskStatus results = reactiveTest.Tick();
     }
 }

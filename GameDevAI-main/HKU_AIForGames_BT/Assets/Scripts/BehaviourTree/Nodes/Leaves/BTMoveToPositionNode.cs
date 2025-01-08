@@ -7,16 +7,31 @@ public class BTMoveToPositionNode : BTBaseNode
 {
     private NavMeshAgent agent;
     private float reachingDistance;
-    private Vector3 targetPosition;
 
-    public BTMoveToPositionNode(NavMeshAgent _agent, float _reachingDistance)
+    private Vector3 targetPosition;
+    private string targetPositionVariable;
+
+    public BTMoveToPositionNode(NavMeshAgent _agent, float _reachingDistance, string _targetPositionVariable)
     {
         agent = _agent;
         reachingDistance = _reachingDistance;
+        targetPositionVariable = _targetPositionVariable;
+    }
+
+    protected override void OnEnter()
+    {
+        agent.stoppingDistance = reachingDistance;
+        targetPosition = blackboard.GetVariable<Transform>(targetPositionVariable).position;
+    }
+
+    protected override void OnExit()
+    {
+        blackboard.SetVariable<Transform>(VariableNames.PATHING_TARGETTRANSFORM, default);
     }
 
     protected override TaskStatus OnUpdate()
     {
+
         // get current speed
         agent.speed = blackboard.GetVariable<float>(VariableNames.MOVING_CURRENTSPEED);
 
@@ -30,19 +45,17 @@ public class BTMoveToPositionNode : BTBaseNode
             agent.SetDestination(targetPosition);
         }
 
-        float distance = Vector3.Distance(targetPosition, agent.transform.position);
-        if(distance <= reachingDistance) { Debug.Log("Am i returning success?"); return TaskStatus.SUCCESS; }
+        float distance = Vector3.Distance(agent.transform.position, targetPosition);
+        if(distance <= reachingDistance) 
+        { 
+            return TaskStatus.SUCCESS; 
+        }
+
         return TaskStatus.RUNNING;
     }
 
-    protected override void OnEnter()
+    public override void OnReset()
     {
-        agent.stoppingDistance = reachingDistance;
-        targetPosition = blackboard.GetVariable<Transform>(VariableNames.PATHING_TARGETTRANSFORM).position;
-    }
-
-    protected override void OnExit()
-    {
-        blackboard.SetVariable<Transform>(VariableNames.PATHING_TARGETTRANSFORM, default);
+        agent.isStopped = true;
     }
 }
