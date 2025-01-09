@@ -10,10 +10,11 @@ public enum TaskStatus { SUCCESS, FAILURE, RUNNING }
 public abstract class BTBaseNode
 {
     protected Blackboard blackboard;        // stores all data for the behaviour tree
+    protected IBlackboardHolder globalBlackboards;
+
     protected Transform self;               // stores transform of the object containing the tree
 
     private bool wasEntered = false;        // stores state of the node
-    
 
     public virtual void OnReset()           // TODO - What does OnReset do exactly, I think it is called when the tree is interrupted
     {
@@ -58,9 +59,10 @@ public abstract class BTBaseNode
 
     }
 
-    public virtual void SetupSelf(Transform _self)
+    public virtual void SetupSelf(Transform _self, IBlackboardHolder _globalBlackboards)
     {
-        self = _self;   
+        self = _self;
+        globalBlackboards = _globalBlackboards;
     }
 
     public virtual void SetupBlackboard(Blackboard _blackboard)

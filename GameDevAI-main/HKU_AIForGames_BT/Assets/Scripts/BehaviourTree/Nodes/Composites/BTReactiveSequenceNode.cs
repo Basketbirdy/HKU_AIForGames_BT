@@ -37,6 +37,7 @@ public class BTReactiveSequenceNode : BTCompositeNode
 
     protected override void OnExit()
     {
+        OnReset();
     }
 
     public override void OnReset()

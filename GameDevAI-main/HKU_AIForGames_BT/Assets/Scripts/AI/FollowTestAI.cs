@@ -17,11 +17,16 @@ public class FollowTestAI : MonoBehaviour
     [SerializeField] private Transform leader;
     [SerializeField] private float followRange = 5f;
 
+    [Header("References")]
+    [SerializeField] private GameObject WorldDataManager;
+    private IBlackboardHolder globalBlackboards;
+
     private int count = 0;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        globalBlackboards = GetComponent<IBlackboardHolder>();
     }
 
     void Start()
@@ -31,6 +36,12 @@ public class FollowTestAI : MonoBehaviour
 
         tree =
             new BTSelectorNode(
+
+                // check if leader is being attacked
+                    // find cover
+                    // move to cover
+                    // throw smokebomb at enemy attacking the player
+
                 new BTTargetWithinDistanceNode("FollowTarget", followRange, ConditionalCheckType.GreaterThanOrEqual,
                     new BTSequenceNode(
                         new BTChangeDynamicTextNode($"State: Following"),
@@ -41,7 +52,7 @@ public class FollowTestAI : MonoBehaviour
                 );
 
 
-        tree.SetupSelf(transform);
+        tree.SetupSelf(transform, globalBlackboards);
         tree.SetupBlackboard(bb);
     }
 

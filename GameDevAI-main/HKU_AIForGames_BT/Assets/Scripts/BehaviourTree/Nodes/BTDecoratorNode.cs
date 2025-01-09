@@ -13,10 +13,10 @@ public abstract class BTDecoratorNode : BTBaseNode
         child = _child;
     }
 
-    public override void SetupSelf(Transform _self)
+    public override void SetupSelf(Transform _self, IBlackboardHolder _globalBlackboards)
     {
-        base.SetupSelf(_self);
-        child.SetupSelf(_self);
+        base.SetupSelf(_self, _globalBlackboards);
+        child.SetupSelf(_self, _globalBlackboards);
     }
 
     public override void SetupBlackboard(Blackboard _blackboard)
