@@ -16,6 +16,11 @@ public class BTWaitNode : BTBaseNode
         maxWaitTime = _maxWaitTime;
     }
 
+    protected override void OnEnter()
+    {
+        elapsedTime = 0;
+    }
+
     protected override TaskStatus OnUpdate()
     {
         if(elapsedTime < maxWaitTime) 
@@ -27,8 +32,9 @@ public class BTWaitNode : BTBaseNode
         return TaskStatus.SUCCESS;
     }
 
-    protected override void OnEnter()
+    public override void OnReset()
     {
         elapsedTime = 0;
     }
+
 }

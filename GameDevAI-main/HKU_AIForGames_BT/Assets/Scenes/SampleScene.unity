@@ -191,6 +191,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1801232501}
+  - {fileID: 1699706383}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &56546438
@@ -207,8 +208,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   keepDistance: 0.55
+  visionRange: 25
   leader: {fileID: 1173255443}
   followRange: 4
+  throwOrigin: {fileID: 1699706383}
+  smokeBombPrefab: {fileID: 1176495890306069533, guid: b569d67e00d82844396eac9507c579ab,
+    type: 3}
+  coverMask:
+    serializedVersion: 2
+    m_Bits: 512
+  smokeBombData:
+    target: {x: 0, y: 0, z: 0}
+    speed: 10
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1.3723466
+        outSlope: 1.3723466
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.08592911
+      - serializedVersion: 3
+        time: 0.75671697
+        value: 0.3867959
+        inSlope: -0.8973263
+        outSlope: -0.8973263
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.14831589
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -1.8396856
+        outSlope: -1.8396856
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.07948446
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  postThrowCooldown: 15
   WorldDataManager: {fileID: 2140002150}
 --- !u!1 &151423124
 GameObject:
@@ -2238,7 +2283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c2db367c5b56f45a3e580f27bd2de4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackedStateDuration: 5
+  attackedStateDuration: 12
   attacked: 0
   attackedTimer: 0
 --- !u!1 &1378901830
@@ -2736,6 +2781,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1686086962}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1699706382
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1699706383}
+  m_Layer: 6
+  m_Name: ThrowOrigin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1699706383
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1699706382}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.5, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 56546437}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1702069468
 GameObject:
   m_ObjectHideFlags: 0

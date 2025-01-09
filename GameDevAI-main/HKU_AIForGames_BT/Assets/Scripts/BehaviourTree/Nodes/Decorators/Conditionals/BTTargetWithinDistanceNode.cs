@@ -49,8 +49,8 @@ public class BTTargetWithinDistanceNode : BTConditionDecoratorNode
                 break;
         }
 
-        Debug.Log($"Condition distance: {distance}");
-        Debug.Log($"Tried condition: {state}");
+        //Debug.Log($"Condition distance: {distance}");
+        //Debug.Log($"Tried condition: {state}");
         return state;
     }
 }

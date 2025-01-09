@@ -77,7 +77,7 @@ public class EnemyAI : MonoBehaviour
                     new BTChangeDynamicTextNode($"State: PlayerCheck"),
                     new BTSelectorNode(
                         new BTSequenceNode(
-                            new BTFindObjectNode(transform, detectionRange, playerMask),
+                            new BTFindObjectNode(detectionRange, playerMask),
                             // TODO - Shoot raycast to player pos to check for walls
                             // TODO - Reset player spotted timer
                             // TODO - set player spotted to true in blackboard
@@ -101,11 +101,11 @@ public class EnemyAI : MonoBehaviour
                     new BTChangeDynamicTextNode($"State: FindWeapon"),
                     // TODO - Find a weapon
                     new BTSequenceNode(
-                        new BTFindObjectNode(transform, detectionRange, weaponMask),
+                        new BTFindObjectNode(detectionRange, weaponMask),
                         new BTWaitNode(.5f),                                                             // search for 2 seconds
                         new BTSelectorNode(
                             new BTSequenceNode(
-                                new BTFindObjectNode(transform, interactRange, weaponMask)                                             
+                                new BTFindObjectNode(interactRange, weaponMask)                                             
                             ),
                             // TODO - Approach the weapon
                             new BTDebugLogNode($"Approaching weapons"),
@@ -140,7 +140,7 @@ public class EnemyAI : MonoBehaviour
                                 ),
                         new BTSelectorNode(
                             new BTSequenceNode(
-                                new BTFindObjectNode(transform, attackRange, playerMask),
+                                new BTFindObjectNode(attackRange, playerMask),
                                  //TODO - Attack player
                                 new BTChangeDynamicTextNode($"State: Attacking"),
                                 new BTDebugLogNode($"Attack time")

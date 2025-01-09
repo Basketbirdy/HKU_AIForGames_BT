@@ -38,9 +38,9 @@ public class AllyAI : MonoBehaviour
 
         allyTree =
             new BTSelectorNode(
-                new BTBooleanConditionNode(VariableNames.DATA_GETTINGATTACKED, true,
+                new BTBooleanConditionNode(VariableNames.DATA_GETTINGATTACKED, true, false,
                     new BTSequenceNode(
-                        new BTFindObjectNode(transform, visionRange, coverMask),
+                        new BTFindObjectNode(visionRange, coverMask),
                         new BTTargetWithinDistanceNode(VariableNames.DATA_FOUNDOBJECT, interactRange, ConditionalCheckType.GreaterThanOrEqual,        //change second transform into the transform of the cover
                             new BTMoveToPositionNode(agent, reachingDistance, VariableNames.DATA_FOUNDOBJECT)
                             ),

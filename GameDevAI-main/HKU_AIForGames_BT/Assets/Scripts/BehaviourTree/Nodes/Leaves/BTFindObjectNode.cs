@@ -4,20 +4,18 @@ using UnityEngine;
 
 public class BTFindObjectNode : BTBaseNode
 {
-    private Transform transform;
     private float range;
     private LayerMask checkMask;
 
-    public BTFindObjectNode(Transform _transform, float _range, LayerMask _checkMask)
+    public BTFindObjectNode(float _range, LayerMask _checkMask)
     {
         range = _range;
-        transform = _transform;
         checkMask = _checkMask;
     }
 
     protected override TaskStatus OnUpdate()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, range, checkMask);
+        Collider[] colliders = Physics.OverlapSphere(self.position, range, checkMask);
         Debug.Log($"Checking for object in range");
 
         if(colliders.Length == 0) 

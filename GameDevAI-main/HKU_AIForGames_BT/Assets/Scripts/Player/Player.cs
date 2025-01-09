@@ -19,7 +19,11 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(1)) { TakeDamage(10f); }
+        if (Input.GetMouseButtonDown(1)) 
+        {
+            GlobalBlackboard.instance.SetGlobalVariable<Transform>("AttackingEnemy", transform, GlobalBlackboardType.ALLY);
+            TakeDamage(10f); 
+        }
     }
 
     public void TakeDamage(float _damage)

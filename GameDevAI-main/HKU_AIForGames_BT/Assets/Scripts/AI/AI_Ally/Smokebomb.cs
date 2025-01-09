@@ -2,13 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Smokebomb : MonoBehaviour
+public class Smokebomb : MonoBehaviour, ISetup<SmokebombData>
 {
     private Vector3 target;
     private float speed;
 
+    [Header("Throw arc")]
     [SerializeField] private AnimationCurve curve;
     [SerializeField] private float curveAmplitude;
+
+    [Header("Smokecloud")]
+    [SerializeField] private GameObject smokeCloudPrefab;
 
     private Vector3 origin;
     private Vector3 ghostPosition;
@@ -37,13 +41,19 @@ public class Smokebomb : MonoBehaviour
 
             yield return null;
         }
+
+        ISetup<Nullable> smokeCloud = Instantiate(smokeCloudPrefab, transform.position, Quaternion.identity).GetComponent<ISetup<Nullable>>();
+        smokeCloud.Setup(new Nullable());
+        Debug.Log($"Spawned smokecloud: {smokeCloud.ToString()}");
+
+        Destroy(gameObject);
     }
 
-    public void SmokebombSetup(Vector3 _target, float _speed, AnimationCurve _curve = null)
+    public void Setup(SmokebombData _data)
     {
-        target = _target;
-        speed = _speed;
-        if(_curve != null) { curve = _curve; }
+        target = _data.target;
+        speed = _data.speed;
+        if(_data.curve != null) { curve = _data.curve; }
 
         origin = transform.position;
 
@@ -53,5 +63,20 @@ public class Smokebomb : MonoBehaviour
     public void FireSmokebomb()
     {
         StartCoroutine(MoveSmokebomb());
+    }
+}
+
+[System.Serializable]
+public struct SmokebombData
+{
+    public Vector3 target;
+    public float speed;
+    public AnimationCurve curve;
+
+    public SmokebombData(Vector3 _target, float _speed, AnimationCurve _curve = null)
+    {
+        target = _target;
+        speed = _speed;
+        curve = _curve;
     }
 }

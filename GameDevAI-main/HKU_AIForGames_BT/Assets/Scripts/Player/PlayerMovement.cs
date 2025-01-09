@@ -40,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
         GetDirection();
         CheckState();
 
-        if(Input.GetMouseButtonDown(0)) { FireSmokebomb(); }
+        //if(Input.GetMouseButtonDown(0)) { FireSmokebomb(); }
     }
 
     private void FixedUpdate()
@@ -80,10 +80,10 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = direction.normalized * currentSpeed;
     }
 
-    private void FireSmokebomb()
-    {
-        Smokebomb sb = Instantiate(smokebombPrefab, transform.position, Quaternion.identity).GetComponent<Smokebomb>();
-        if(sb == null) { return; }
-        sb.SmokebombSetup(transform.position + new Vector3(0, 0, 10), 12);
-    }
+    //private void FireSmokebomb()
+    //{
+    //    Smokebomb sb = Instantiate(smokebombPrefab, transform.position, Quaternion.identity).GetComponent<Smokebomb>();
+    //    if(sb == null) { return; }
+    //    sb.Setup(transform.position + new Vector3(0, 0, 10), 12);
+    //}
 }
