@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 /// <summary>
@@ -11,6 +12,15 @@ public abstract class BTCompositeNode : BTBaseNode
     public BTCompositeNode(params BTBaseNode[] _children)
     {
         children = _children;
+    }
+
+    public override void SetupSelf(Transform _self)
+    {
+        base.SetupSelf(_self);
+        foreach (BTBaseNode node in children)
+        {
+            node.SetupSelf(_self);
+        }
     }
 
     public override void SetupBlackboard(Blackboard _blackboard)

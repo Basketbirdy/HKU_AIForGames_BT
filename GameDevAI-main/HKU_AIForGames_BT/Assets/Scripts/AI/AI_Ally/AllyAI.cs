@@ -41,7 +41,7 @@ public class AllyAI : MonoBehaviour
                 new BTBooleanConditionNode(VariableNames.DATA_GETTINGATTACKED, true,
                     new BTSequenceNode(
                         new BTFindObjectNode(transform, visionRange, coverMask),
-                        new BTTargetWithinDistanceNode(transform, /* cover transform */, interactRange, ConditionalCheckType.GreaterThanOrEqual,
+                        new BTTargetWithinDistanceNode(VariableNames.DATA_FOUNDOBJECT, interactRange, ConditionalCheckType.GreaterThanOrEqual,        //change second transform into the transform of the cover
                             new BTMoveToPositionNode(agent, reachingDistance, VariableNames.DATA_FOUNDOBJECT)
                             ),
                         // TODO - Throw Smokebomb at enemy that is attacking
@@ -49,11 +49,11 @@ public class AllyAI : MonoBehaviour
                             )
                     ),
                 // TODO - check if player is being attacked
-                new BTTargetWithinDistanceNode(transform, leader.transform, followRange, ConditionalCheckType.GreaterThanOrEqual,
+                new BTTargetWithinDistanceNode(VariableNames.PATHING_TARGETTRANSFORM, followRange, ConditionalCheckType.GreaterThanOrEqual,              // change targettransform string into string for follow target transform
                     new BTMoveToPositionNode(agent, reachingDistance, "Leader")
                     ),
                 // TODO - Idle behavior
-                new BTChangeDynamicTextNode($"State: Idle", transform)
+                new BTChangeDynamicTextNode($"State: Idle")
                 );
 
         allyTree.SetupBlackboard(blackboard);

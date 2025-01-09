@@ -34,10 +34,10 @@ public class TestAI : MonoBehaviour
 
         allyTree = 
             new BTSequenceNode(
-                new BTChangeDynamicTextNode($"State: Patrolling", transform),
+                new BTChangeDynamicTextNode($"State: Patrolling"),
                 new BTSetTargetToWaypointNode(VariableNames.PATROL_WAYPOINTS, VariableNames.PATROL_CURRENTWAYPOINT),
                 new BTMoveToPositionNode(agent, reachingDistance, VariableNames.PATHING_TARGETTRANSFORM),
-                new BTChangeDynamicTextNode($"State: Waiting", transform),
+                new BTChangeDynamicTextNode($"State: Waiting"),
                 new BTWaitNode(2f),
                 new BTIncrementIndexNode<Transform>(VariableNames.PATROL_CURRENTWAYPOINT, VariableNames.PATROL_WAYPOINTS)
         );

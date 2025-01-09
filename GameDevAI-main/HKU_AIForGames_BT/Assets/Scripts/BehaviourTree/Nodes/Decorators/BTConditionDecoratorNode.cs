@@ -9,7 +9,11 @@ public abstract class BTConditionDecoratorNode : BTDecoratorNode
     protected override TaskStatus OnUpdate()
     {
         bool condition = TryCondition();
-        if (!condition) { return TaskStatus.FAILURE; }
+        if (!condition) 
+        {
+            OnReset();
+            return TaskStatus.FAILURE; 
+        }
 
         TaskStatus result = child.Tick();
         return result;

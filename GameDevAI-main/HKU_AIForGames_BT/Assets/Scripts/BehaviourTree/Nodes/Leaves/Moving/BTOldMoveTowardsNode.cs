@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BTMoveTowardsNode : BTBaseNode
+public class BTOldMoveTowardsNode : BTBaseNode
 {
     private float speed;
     private float reachDistance;
     private Vector3 target;
     private Transform transform;
 
-    public BTMoveTowardsNode(Vector3 _target, float _reachDistance, Transform _transform)
+    public BTOldMoveTowardsNode(Vector3 _target, float _reachDistance, Transform _transform)
     {
         transform = _transform;
         target = _target;

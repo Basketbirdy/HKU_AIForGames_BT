@@ -63,18 +63,18 @@ public class EnemyAI : MonoBehaviour
         // tree setup
         patrolTree = 
             new BTSequenceNode(
-                new BTChangeDynamicTextNode($"State: Patrolling", transform),
+                new BTChangeDynamicTextNode($"State: Patrolling"),
                 new BTSetTargetToWaypointNode(VariableNames.PATROL_WAYPOINTS, VariableNames.PATROL_CURRENTWAYPOINT),
                 new BTMoveToPositionNode(agent, reachingDistance, VariableNames.PATHING_TARGETTRANSFORM),
                 new BTWaitNode(2f),
-                new BTChangeDynamicTextNode($"State: Waiting", transform),
+                new BTChangeDynamicTextNode($"State: Waiting"),
                 new BTIncrementIndexNode<Transform>(VariableNames.PATROL_CURRENTWAYPOINT, VariableNames.PATROL_WAYPOINTS)
         );
 
         playerCheckTree = 
             new BTSelectorNode(
                 new BTSequenceNode(
-                    new BTChangeDynamicTextNode($"State: PlayerCheck", transform),
+                    new BTChangeDynamicTextNode($"State: PlayerCheck"),
                     new BTSelectorNode(
                         new BTSequenceNode(
                             new BTFindObjectNode(transform, detectionRange, playerMask),
@@ -98,7 +98,7 @@ public class EnemyAI : MonoBehaviour
             new BTSelectorNode(
                 new BTSequenceNode(
                     new BTDebugLogNode($"Finding weapon"),
-                    new BTChangeDynamicTextNode($"State: FindWeapon", transform),
+                    new BTChangeDynamicTextNode($"State: FindWeapon"),
                     // TODO - Find a weapon
                     new BTSequenceNode(
                         new BTFindObjectNode(transform, detectionRange, weaponMask),
@@ -142,7 +142,7 @@ public class EnemyAI : MonoBehaviour
                             new BTSequenceNode(
                                 new BTFindObjectNode(transform, attackRange, playerMask),
                                  //TODO - Attack player
-                                new BTChangeDynamicTextNode($"State: Attacking", transform),
+                                new BTChangeDynamicTextNode($"State: Attacking"),
                                 new BTDebugLogNode($"Attack time")
                                 ),
                              //TODO - set enemy target to player and move towards it

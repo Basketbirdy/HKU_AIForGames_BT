@@ -8,6 +8,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float baseSpeed = 5f;
     [SerializeField] private float sprintMultiplier = 2.5f;
 
+    [Space]
+
+    [SerializeField] private GameObject smokebombPrefab;
+
     private KeyCode sprintKey = KeyCode.LeftShift;
 
     private Vector3 direction;
@@ -35,6 +39,8 @@ public class PlayerMovement : MonoBehaviour
     {
         GetDirection();
         CheckState();
+
+        if(Input.GetMouseButtonDown(0)) { FireSmokebomb(); }
     }
 
     private void FixedUpdate()
@@ -72,5 +78,12 @@ public class PlayerMovement : MonoBehaviour
         if(rb == null) { return; }
 
         rb.velocity = direction.normalized * currentSpeed;
+    }
+
+    private void FireSmokebomb()
+    {
+        Smokebomb sb = Instantiate(smokebombPrefab, transform.position, Quaternion.identity).GetComponent<Smokebomb>();
+        if(sb == null) { return; }
+        sb.SmokebombSetup(transform.position + new Vector3(0, 0, 10), 12);
     }
 }
