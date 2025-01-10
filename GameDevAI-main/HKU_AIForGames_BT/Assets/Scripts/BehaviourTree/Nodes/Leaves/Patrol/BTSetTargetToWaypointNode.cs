@@ -4,23 +4,25 @@ using UnityEngine;
 
 public class BTSetTargetToWaypointNode : BTBaseNode
 {
-    private string waypointsVariableName;
-    private string indexVariableName;
+    private string currentWayPointBBVariable;
+    private string waypointsBBVariable;
+    private string indexBBVariable;
 
-    public BTSetTargetToWaypointNode(string _waypointsVariableName, string _indexVariableName)
+    public BTSetTargetToWaypointNode(string _currentWaypointBBVariable, string _waypointsBBVariable, string _indexBBVariable)
     {
-        waypointsVariableName = _waypointsVariableName;
-        indexVariableName = _indexVariableName;
+        currentWayPointBBVariable = _currentWaypointBBVariable;
+        waypointsBBVariable = _waypointsBBVariable;
+        indexBBVariable = _indexBBVariable;
     }
 
     protected override TaskStatus OnUpdate()
     {
-        Transform[] waypoints = blackboard.GetVariable<Transform[]>(waypointsVariableName);
-        int newValue = blackboard.GetVariable<int>(indexVariableName);
+        Transform[] waypoints = blackboard.GetVariable<Transform[]>(waypointsBBVariable);
+        int newValue = blackboard.GetVariable<int>(indexBBVariable);
 
         if(waypoints.Length == 0) { return TaskStatus.FAILURE; }
 
-        blackboard.SetVariable<Transform>(VariableNames.PATHING_TARGETTRANSFORM, waypoints[newValue]);
+        blackboard.SetVariable<Transform>(currentWayPointBBVariable, waypoints[newValue]);
 
         return TaskStatus.SUCCESS;
     }

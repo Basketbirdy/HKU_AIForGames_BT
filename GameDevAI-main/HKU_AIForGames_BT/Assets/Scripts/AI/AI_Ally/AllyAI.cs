@@ -48,7 +48,7 @@ public class AllyAI : MonoBehaviour
             new BTSelectorNode(
 
                 // check if leader is being attacked
-                new BTBooleanConditionNode("PlayerAttacked", true, true,
+                new BTBooleanConditionNode("PlayerAttacked", true, true, GlobalBlackboardType.ALLY,
                     new BTSequenceNode(
                         new BTChangeDynamicTextNode($"State: Looking"),
                         new BTWaitNode(1f),
