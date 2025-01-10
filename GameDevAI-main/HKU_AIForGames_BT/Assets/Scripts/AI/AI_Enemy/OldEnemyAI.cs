@@ -81,13 +81,13 @@ public class OldEnemyAI : MonoBehaviour
                             // TODO - Shoot raycast to player pos to check for walls
                             // TODO - Reset player spotted timer
                             // TODO - set player spotted to true in blackboard
-                            new BTSetBlackboardVariableNode<bool>(VariableNames.DATA_PLAYERSPOTTED, true),
+                            new BTSetBlackboardVariableNode<bool>(VariableNames.DATA_PLAYERSPOTTED, true, false),
                             new BTDebugLogNode($"Player found")
                         ),
                         new BTSequenceNode(
                             // TODO - check if the timer is finished
                             // TODO - set player spotted to false
-                            new BTSetBlackboardVariableNode<bool>(VariableNames.DATA_PLAYERSPOTTED, false),
+                            new BTSetBlackboardVariableNode<bool>(VariableNames.DATA_PLAYERSPOTTED, false, false),
                             new BTDebugLogNode($"Player NOT found")
                         )
                     )
@@ -114,7 +114,7 @@ public class OldEnemyAI : MonoBehaviour
                         // TODO - Pick weapon up + despawn/disable weapon object
                         new BTDebugLogNode($"picking up weapon"),
                         new BTWaitNode(.5f),
-                        new BTSetBlackboardVariableNode<bool>(VariableNames.DATA_HASWEAPON, true)
+                        new BTSetBlackboardVariableNode<bool>(VariableNames.DATA_HASWEAPON, true, false)
                     ),
                     // TODO - run away behaviour (fleeing)
                     new BTDebugLogNode($"Fleeing")

@@ -27,7 +27,7 @@ public class AllyAI : MonoBehaviour
     [SerializeField] private float postThrowCooldown;
 
     [Header("References")]
-    [SerializeField] private GameObject WorldDataManager;
+    [SerializeField] private GameObject worldDataManager;
     private IBlackboardHolder globalBlackboards;
 
     private int count = 0;
@@ -35,7 +35,7 @@ public class AllyAI : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        globalBlackboards = GetComponent<IBlackboardHolder>();
+        globalBlackboards = worldDataManager.GetComponent<IBlackboardHolder>();
     }
 
     void Start()
