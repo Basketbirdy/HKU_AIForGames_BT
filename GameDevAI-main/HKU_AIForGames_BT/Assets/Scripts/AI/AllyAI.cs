@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class FollowTestAI : MonoBehaviour
+public class AllyAI : MonoBehaviour
 {
     private BTBaseNode tree;
 
@@ -11,6 +11,7 @@ public class FollowTestAI : MonoBehaviour
 
     [Header("Generic")]
     [SerializeField] private float speed;
+    [SerializeField] private float speedMultiplier;
     [SerializeField] private float keepDistance = 2f;
     [SerializeField] private float visionRange;
 
@@ -62,9 +63,6 @@ public class FollowTestAI : MonoBehaviour
                         new BTWaitNode(postThrowCooldown)
                         )
                     ),
-                    // find cover
-                    // move to cover
-                    // throw smokebomb at enemy attacking the player
 
                 new BTTargetWithinDistanceNode("FollowTarget", followRange, ConditionalCheckType.GreaterThanOrEqual,
                     new BTSequenceNode(
@@ -72,7 +70,9 @@ public class FollowTestAI : MonoBehaviour
                         new BTMoveTowardsNode(agent, "FollowTarget", speed, keepDistance)
                         )
                     ),
+
                 new BTChangeDynamicTextNode($"State: Idle")
+
                 );
 
 

@@ -5,7 +5,7 @@ using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyAI : MonoBehaviour
+public class OldEnemyAI : MonoBehaviour
 {
     // main behaviour tree
     BTBaseNode enemyTree;

@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamagable
 {
     [Header("Attacked state")]
     [SerializeField] private float attackedStateDuration = 5f;
@@ -10,10 +11,15 @@ public class Player : MonoBehaviour
     [SerializeField] private float attackedTimer = 0;
     private Coroutine attackedCoroutine;
 
+    [Header("Health")]
+    [SerializeField] private float maxHealth;
+    private float health;
+    [HideInInspector] public float Health { get => health; set => health += value; }
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        health = maxHealth;
     }
 
     // Update is called once per frame
@@ -21,16 +27,23 @@ public class Player : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1)) 
         {
-            GlobalBlackboard.instance.SetGlobalVariable<Transform>("AttackingEnemy", transform, GlobalBlackboardType.ALLY);
-            TakeDamage(10f); 
+            TakeDamage(10f, gameObject); 
         }
     }
 
-    public void TakeDamage(float _damage)
+    public void TakeDamage(float _damage, GameObject _attacker)
     {
-        if(attackedCoroutine != null) { attackedTimer = 0f; }
+        // do damage (not neccessary)
+        health -= _damage;
+        if(health <= 0) { Die(); }
+
+        GlobalBlackboard.instance.SetGlobalVariable<Transform>("LastKnownAttacker", _attacker.transform, GlobalBlackboardType.ALLY);
+
+        if (attackedCoroutine != null) { attackedTimer = 0f; }
         attackedCoroutine = StartCoroutine(AttackedTimer());
     }
+
+    public void Die() { }
 
     public IEnumerator AttackedTimer()
     {

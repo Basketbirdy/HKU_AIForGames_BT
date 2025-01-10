@@ -20,11 +20,6 @@ public class GlobalBlackboard : MonoBehaviour, IBlackboardHolder
         SetupBlackboards();
     }
 
-    private void Start()
-    {
-        
-    }
-
     public T GetGlobalVariable<T>(string _variableName, GlobalBlackboardType _BBType)
     {
         if (!blackboards.ContainsKey(_BBType)) 

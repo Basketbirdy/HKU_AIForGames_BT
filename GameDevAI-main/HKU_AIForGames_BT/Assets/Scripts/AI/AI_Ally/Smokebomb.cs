@@ -51,7 +51,7 @@ public class Smokebomb : MonoBehaviour, ISetup<SmokebombData>
 
     public void Setup(SmokebombData _data)
     {
-        target = _data.target;
+        target = GlobalBlackboard.instance.GetGlobalVariable<Transform>(_data.targetBBVariable, GlobalBlackboardType.ALLY).position;
         speed = _data.speed;
         if(_data.curve != null) { curve = _data.curve; }
 
@@ -69,13 +69,13 @@ public class Smokebomb : MonoBehaviour, ISetup<SmokebombData>
 [System.Serializable]
 public struct SmokebombData
 {
-    public Vector3 target;
+    public string targetBBVariable;
     public float speed;
     public AnimationCurve curve;
 
-    public SmokebombData(Vector3 _target, float _speed, AnimationCurve _curve = null)
+    public SmokebombData(string _targetBBVariable, float _speed, AnimationCurve _curve = null)
     {
-        target = _target;
+        targetBBVariable = _targetBBVariable;
         speed = _speed;
         curve = _curve;
     }
