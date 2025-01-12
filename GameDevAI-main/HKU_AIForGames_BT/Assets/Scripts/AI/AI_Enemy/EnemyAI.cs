@@ -52,7 +52,7 @@ public class EnemyAI : MonoBehaviour
         tree =
             new BTSelectorNode(
 
-                new BTTimerNode("PlayerSpottedTimer", detectionDuration, true, GlobalBlackboardType.ENEMY,
+                new BTTimerConditionNode("PlayerSpottedTimer", detectionDuration, true, GlobalBlackboardType.ENEMY,
                     // Do this if timer is running - player is spotted
 
                     new BTSequenceNode(

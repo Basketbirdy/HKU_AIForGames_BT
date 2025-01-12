@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
-public class BTTimerNode : BTConditionDecoratorNode
+public class BTTimerConditionNode : BTConditionDecoratorNode
 {
     private string timerBBVariable;
     private float timerDuration;
     private bool global;
     private GlobalBlackboardType globalBlackboard;
 
-    public BTTimerNode(string _timerBBVariable, float _timerDuration, bool _global, GlobalBlackboardType _globalBlackboard, BTBaseNode _child) : base(_child) 
+    public BTTimerConditionNode(string _timerBBVariable, float _timerDuration, bool _global, GlobalBlackboardType _globalBlackboard, BTBaseNode _child) : base(_child) 
     {
         timerBBVariable = _timerBBVariable;
         timerDuration = _timerDuration;
