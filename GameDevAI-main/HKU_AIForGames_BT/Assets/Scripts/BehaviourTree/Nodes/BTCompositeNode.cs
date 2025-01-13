@@ -14,12 +14,12 @@ public abstract class BTCompositeNode : BTBaseNode
         children = _children;
     }
 
-    public override void SetupSelf(Transform _self, IBlackboardHolder _globalBlackboards)
+    public override void SetupSelf(Transform _self)
     {
-        base.SetupSelf(_self, _globalBlackboards);
+        base.SetupSelf(_self);
         foreach (BTBaseNode node in children)
         {
-            node.SetupSelf(_self, _globalBlackboards);
+            node.SetupSelf(_self);
         }
     }
 

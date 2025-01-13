@@ -76,7 +76,7 @@ public class AllyAI : MonoBehaviour
                 );
 
 
-        tree.SetupSelf(transform, globalBlackboards);
+        tree.SetupSelf(transform);
         tree.SetupBlackboard(bb);
     }
 

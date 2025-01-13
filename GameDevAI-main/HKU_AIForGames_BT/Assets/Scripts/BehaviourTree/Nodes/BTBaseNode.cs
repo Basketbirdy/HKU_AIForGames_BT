@@ -10,7 +10,6 @@ public enum TaskStatus { SUCCESS, FAILURE, RUNNING }
 public abstract class BTBaseNode
 {
     protected Blackboard blackboard;        // stores all data for the behaviour tree
-    protected IBlackboardHolder globalBlackboards;
 
     protected Transform self;               // stores transform of the object containing the tree
 
@@ -59,10 +58,9 @@ public abstract class BTBaseNode
 
     }
 
-    public virtual void SetupSelf(Transform _self, IBlackboardHolder _globalBlackboards)
+    public virtual void SetupSelf(Transform _self)
     {
         self = _self;
-        globalBlackboards = _globalBlackboards;
     }
 
     public virtual void SetupBlackboard(Blackboard _blackboard)

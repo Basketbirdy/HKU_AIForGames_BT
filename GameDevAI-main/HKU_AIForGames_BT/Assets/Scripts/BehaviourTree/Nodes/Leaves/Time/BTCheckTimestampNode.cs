@@ -23,7 +23,7 @@ public class BTCheckTimestampNode : BTBaseNode
         if (blackboardType != BlackboardType.LOCAL) { timestamp = GlobalBlackboard.instance.GetGlobalVariable<float>(timestampBBVariable, blackboardType); }
         else { timestamp = blackboard.GetVariable<float>(timestampBBVariable); }
 
-        if (Time.time >= timestamp + delay) { return TaskStatus.SUCCESS; }
+        if (Time.time >= timestamp + delay || timestamp == 0) { return TaskStatus.SUCCESS; }
         else { return TaskStatus.FAILURE; }
     }
 }

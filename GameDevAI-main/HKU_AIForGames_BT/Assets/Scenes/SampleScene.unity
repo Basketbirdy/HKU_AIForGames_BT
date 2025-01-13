@@ -2134,6 +2134,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   attackRange: 5
+  attackCooldown: 4
   pauseDuration: 3
   waypoints:
   - {fileID: 1000995152}

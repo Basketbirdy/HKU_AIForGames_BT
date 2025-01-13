@@ -23,6 +23,6 @@ public class GlobalBlackboardManager : MonoBehaviour
         GlobalBlackboard.instance.SetGlobalVariable<Transform>("PlayerTransform", player, BlackboardType.GLOBAL);
 
         // global enemy blackboard
-        GlobalBlackboard.instance.SetGlobalVariable<float>("PlayerSpottedTimer", 999, BlackboardType.ENEMY);
+        //GlobalBlackboard.instance.SetGlobalVariable<float>("Player_LastSeen", 999, BlackboardType.ENEMY);
     }
 }

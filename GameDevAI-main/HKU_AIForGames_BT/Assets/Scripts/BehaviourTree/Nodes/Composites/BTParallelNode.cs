@@ -4,17 +4,18 @@ using UnityEngine;
 
 /// <summary>
 /// Composite node that runs all children
-/// <br></br> returns result of specified priority node
+/// <br></br> returns result of last child node
 /// </summary>
 public class BTParallelNode : BTCompositeNode
 {
     private int currentIndex;
     private int priorityIndex;
 
-    public BTParallelNode(int _priorityIndex, BTBaseNode[] _children) : base(_children) 
+    public BTParallelNode(params BTBaseNode[] _children) : base(_children) 
     {
-        priorityIndex = _priorityIndex;
-        if(priorityIndex == 0) { priorityIndex = children.Length - 1; }
+        //priorityIndex = _priorityIndex;
+        //if(priorityIndex == 0) { priorityIndex = children.Length - 1; }
+        priorityIndex = children.Length - 1;
     }
 
     protected override void OnEnter()
@@ -34,6 +35,8 @@ public class BTParallelNode : BTCompositeNode
             TaskStatus result = children[currentIndex].Tick();
 
             if(currentIndex != priorityIndex) { continue; }
+
+            //if(result == TaskStatus.RUNNING) { OnReset(); } //// try if tree is not being interupted when something changes
 
             return result;
         }

@@ -11,7 +11,7 @@ public class BTSetBlackboardVariableNode<T> : BTBaseNode
 
     private BlackboardType blackboardType;
 
-    public BTSetBlackboardVariableNode(string _variableToSetName, T _newValue, BlackboardType _blackboardType = BlackboardType.GLOBAL)
+    public BTSetBlackboardVariableNode(string _variableToSetName, T _newValue, BlackboardType _blackboardType = BlackboardType.LOCAL)
     {
         altNewValueName = default(string);
 
@@ -21,7 +21,7 @@ public class BTSetBlackboardVariableNode<T> : BTBaseNode
         blackboardType = _blackboardType;
     }
 
-    public BTSetBlackboardVariableNode(string _variableToSetName, string _newValueVariableName, BlackboardType _blackboardType = BlackboardType.GLOBAL)
+    public BTSetBlackboardVariableNode(string _variableToSetName, string _newValueVariableName, BlackboardType _blackboardType = BlackboardType.LOCAL)
     {
         altNewValueName = default(string);
 

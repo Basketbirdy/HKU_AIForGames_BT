@@ -15,18 +15,24 @@ public class BTMoveTowardsNode : BTBaseNode
 
     private string targetBBVariable;
 
-    public BTMoveTowardsNode(NavMeshAgent _agent, string _targetBBVariable, float _speed, float _keepDistance)
+    private BlackboardType blackboardType;
+
+    public BTMoveTowardsNode(NavMeshAgent _agent, string _targetBBVariable, float _speed, float _keepDistance, BlackboardType _blackboardType = BlackboardType.LOCAL)
     {
         agent = _agent;
         targetBBVariable = _targetBBVariable;
         speed = _speed;
         keepDistance = _keepDistance;
+
+        blackboardType = _blackboardType;
     }
 
     protected override void OnEnter()
     {
         agent.speed = speed;
-        target = blackboard.GetVariable<Transform>(targetBBVariable);
+
+        if(blackboardType != BlackboardType.LOCAL) { target = GlobalBlackboard.instance.GetGlobalVariable<Transform>(targetBBVariable, blackboardType); }
+        else { target = blackboard.GetVariable<Transform>(targetBBVariable); }
     }
 
     protected override void OnExit()
@@ -39,6 +45,12 @@ public class BTMoveTowardsNode : BTBaseNode
         if(agent == null) { return TaskStatus.FAILURE; }
         if(agent.pathPending) { return TaskStatus.RUNNING; }
         if(agent.hasPath && agent.path.status == NavMeshPathStatus.PathInvalid) { return TaskStatus.FAILURE; }
+
+        if(target == null) 
+        {
+            Debug.Log("Target is null");
+        }
+
         if(agent.pathEndPosition != target.position)
         {
             agent.SetDestination(target.position);
