@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum GlobalBlackboardType { GLOBAL, ENTITY, ENEMY, ALLY }
+public enum BlackboardType { LOCAL, GLOBAL, ENTITY, ENEMY, ALLY }
 public class GlobalBlackboard : MonoBehaviour, IBlackboardHolder
 {
     public static GlobalBlackboard instance;
 
-    private Dictionary<GlobalBlackboardType, Blackboard> blackboards = new Dictionary<GlobalBlackboardType, Blackboard>();
-    public Dictionary<GlobalBlackboardType, Blackboard> Blackboards => blackboards;
+    private Dictionary<BlackboardType, Blackboard> blackboards = new Dictionary<BlackboardType, Blackboard>();
+    public Dictionary<BlackboardType, Blackboard> Blackboards => blackboards;
 
     private void Awake()
     {
@@ -20,7 +20,7 @@ public class GlobalBlackboard : MonoBehaviour, IBlackboardHolder
         SetupBlackboards();
     }
 
-    public T GetGlobalVariable<T>(string _variableName, GlobalBlackboardType _BBType)
+    public T GetGlobalVariable<T>(string _variableName, BlackboardType _BBType)
     {
         if (!blackboards.ContainsKey(_BBType)) 
         {
@@ -30,7 +30,7 @@ public class GlobalBlackboard : MonoBehaviour, IBlackboardHolder
         return blackboards[_BBType].GetVariable<T>(_variableName);
     }
 
-    public void SetGlobalVariable<T>(string _variableName, T _variable, GlobalBlackboardType _BBType)
+    public void SetGlobalVariable<T>(string _variableName, T _variable, BlackboardType _BBType)
     {
         if (!blackboards.ContainsKey(_BBType)) 
         {
@@ -42,8 +42,9 @@ public class GlobalBlackboard : MonoBehaviour, IBlackboardHolder
 
     private void SetupBlackboards()
     {
-        foreach(GlobalBlackboardType bb in Enum.GetValues(typeof(GlobalBlackboardType)))
+        foreach(BlackboardType bb in Enum.GetValues(typeof(BlackboardType)))
         {
+            if(bb == BlackboardType.LOCAL) { continue; }
             blackboards.Add(bb, new Blackboard());
         }
     }

@@ -9,23 +9,21 @@ public class BTFloatConditionNode : BTConditionDecoratorNode
     private float compareValue;
     private ConditionalCheckType conditionType;
 
-    private bool global;
-    private GlobalBlackboardType globalBlackboardType;
+    private BlackboardType blackboardType;
 
-    public BTFloatConditionNode(string _valueBBVariable, float _compareValue, ConditionalCheckType _conditionalCheckType, bool _global, GlobalBlackboardType _globalBlackboardType, BTBaseNode _child) : base(_child)
+    public BTFloatConditionNode(string _valueBBVariable, float _compareValue, ConditionalCheckType _conditionalCheckType, BlackboardType _blackboardType, BTBaseNode _child) : base(_child)
     {
         valueBBVariable = _valueBBVariable;
         compareValue = _compareValue;
         conditionType = _conditionalCheckType;
 
-        global = _global;
-        globalBlackboardType = _globalBlackboardType;
+        blackboardType = _blackboardType;
     }
 
     protected override bool TryCondition()
     {
         float value = 0;
-        if (global) { value = GlobalBlackboard.instance.GetGlobalVariable<float>(valueBBVariable, globalBlackboardType); }
+        if (blackboardType != BlackboardType.LOCAL) { value = GlobalBlackboard.instance.GetGlobalVariable<float>(valueBBVariable, blackboardType); }
         else { value = blackboard.GetVariable<float>(valueBBVariable); }
 
         bool state = false;

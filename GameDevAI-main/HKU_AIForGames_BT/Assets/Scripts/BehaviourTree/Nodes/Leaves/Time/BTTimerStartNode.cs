@@ -11,15 +11,13 @@ public class BTTimerStartNode : BTBaseNode
     private string timerBBVariable;
     private float delay;
 
-    private bool global;
-    private GlobalBlackboardType blackboardType;
+    private BlackboardType blackboardType;
 
-    public BTTimerStartNode(string _timerBBVariable, float _delay, bool _global, GlobalBlackboardType _blackboardType)
+    public BTTimerStartNode(string _timerBBVariable, float _delay, BlackboardType _blackboardType)
     {
         timerBBVariable = _timerBBVariable;
         delay = _delay;
 
-        global = _global;
         blackboardType = _blackboardType;
     }
 
@@ -37,7 +35,7 @@ public class BTTimerStartNode : BTBaseNode
     {
         if(delay == 0) { return TaskStatus.FAILURE; }
 
-        if (global) { GlobalBlackboard.instance.SetGlobalVariable<float>(timerBBVariable, Time.time + delay, blackboardType); }
+        if (blackboardType != BlackboardType.LOCAL) { GlobalBlackboard.instance.SetGlobalVariable<float>(timerBBVariable, Time.time + delay, blackboardType); }
         else {  blackboard.SetVariable<float>(timerBBVariable, Time.time + delay); }
 
         return TaskStatus.SUCCESS;

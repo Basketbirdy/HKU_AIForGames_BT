@@ -52,7 +52,7 @@ public class EnemyAI : MonoBehaviour
         tree =
             new BTSelectorNode(
 
-                new BTTimerConditionNode("PlayerSpottedTimer", detectionDuration, true, GlobalBlackboardType.ENEMY,
+                new BTTimerConditionNode("PlayerSpottedTimer", detectionDuration, BlackboardType.ENEMY,
                     // Do this if timer is running - player is spotted
 
                     new BTSequenceNode(
@@ -60,7 +60,7 @@ public class EnemyAI : MonoBehaviour
                         new BTSelectorNode(
 
                             // check if blackboard has weapon
-                            new BTBooleanConditionNode("HasWeapon", true, false, GlobalBlackboardType.GLOBAL,
+                            new BTBooleanConditionNode("HasWeapon", true, BlackboardType.GLOBAL,
 
                                 new BTSequenceNode(
 
@@ -95,7 +95,7 @@ public class EnemyAI : MonoBehaviour
                                 new BTMoveTowardsNode(agent, VariableNames.DATA_FOUNDOBJECT, speed, keepDistance),
                                 new BTChangeDynamicTextNode($"State: Picking up weapon"),
                                 new BTWaitNode(pickupDuration),
-                                new BTSetBlackboardVariableNode<bool>("HasWeapon", true, false)
+                                new BTSetBlackboardVariableNode<bool>("HasWeapon", true)
 
                                 )
 
@@ -108,7 +108,7 @@ public class EnemyAI : MonoBehaviour
                 new BTSequenceNode(
 
                     new BTFindObjectNode(detectionRange, detectionMask),
-                    new BTSetBlackboardVariableNode<float>("PlayerSpottedTimer", 0f, true, GlobalBlackboardType.ENEMY)
+                    new BTSetBlackboardVariableNode<float>("PlayerSpottedTimer", 0f, BlackboardType.ENEMY)
 
                     ),
 

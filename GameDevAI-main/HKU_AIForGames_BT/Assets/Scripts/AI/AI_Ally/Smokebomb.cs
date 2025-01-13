@@ -51,7 +51,7 @@ public class Smokebomb : MonoBehaviour, ISetup<SmokebombData>
 
     public void Setup(SmokebombData _data)
     {
-        target = GlobalBlackboard.instance.GetGlobalVariable<Transform>(_data.targetBBVariable, GlobalBlackboardType.ALLY).position;
+        target = GlobalBlackboard.instance.GetGlobalVariable<Transform>(_data.targetBBVariable, BlackboardType.ALLY).position;
         speed = _data.speed;
         if(_data.curve != null) { curve = _data.curve; }
 

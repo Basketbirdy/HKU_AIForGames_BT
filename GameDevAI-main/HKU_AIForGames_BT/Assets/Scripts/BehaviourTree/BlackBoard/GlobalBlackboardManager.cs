@@ -20,9 +20,9 @@ public class GlobalBlackboardManager : MonoBehaviour
     private void VariableSetup()
     {
         // global blackboard
-        GlobalBlackboard.instance.SetGlobalVariable<Transform>("PlayerTransform", player, GlobalBlackboardType.GLOBAL);
+        GlobalBlackboard.instance.SetGlobalVariable<Transform>("PlayerTransform", player, BlackboardType.GLOBAL);
 
         // global enemy blackboard
-        GlobalBlackboard.instance.SetGlobalVariable<float>("PlayerSpottedTimer", 999, GlobalBlackboardType.ENEMY);
+        GlobalBlackboard.instance.SetGlobalVariable<float>("PlayerSpottedTimer", 999, BlackboardType.ENEMY);
     }
 }

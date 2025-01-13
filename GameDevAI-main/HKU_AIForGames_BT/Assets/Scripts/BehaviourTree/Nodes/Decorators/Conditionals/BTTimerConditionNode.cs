@@ -7,21 +7,21 @@ public class BTTimerConditionNode : BTConditionDecoratorNode
 {
     private string timerBBVariable;
     private float timerDuration;
-    private bool global;
-    private GlobalBlackboardType globalBlackboard;
 
-    public BTTimerConditionNode(string _timerBBVariable, float _timerDuration, bool _global, GlobalBlackboardType _globalBlackboard, BTBaseNode _child) : base(_child) 
+    private BlackboardType blackboardType;
+
+    public BTTimerConditionNode(string _timerBBVariable, float _timerDuration, BlackboardType _blackboardType, BTBaseNode _child) : base(_child) 
     {
         timerBBVariable = _timerBBVariable;
         timerDuration = _timerDuration;
-        global = _global;
-        globalBlackboard = _globalBlackboard;
+
+        blackboardType = _blackboardType;
     }
 
     protected override bool TryCondition()
     {
         float elapsedTime = 0f;
-        if (global) { elapsedTime = GlobalBlackboard.instance.GetGlobalVariable<float>(timerBBVariable, globalBlackboard); }
+        if (blackboardType != BlackboardType.LOCAL) { elapsedTime = GlobalBlackboard.instance.GetGlobalVariable<float>(timerBBVariable, blackboardType); }
         else { elapsedTime = blackboard.GetVariable<float>(timerBBVariable); }
 
         Debug.Log($"elapsedTime: {elapsedTime}");
@@ -30,7 +30,7 @@ public class BTTimerConditionNode : BTConditionDecoratorNode
         else 
         {
             elapsedTime += Time.deltaTime;
-            if (global) { GlobalBlackboard.instance.SetGlobalVariable<float>(timerBBVariable, elapsedTime, globalBlackboard); }
+            if (blackboardType != BlackboardType.LOCAL) { GlobalBlackboard.instance.SetGlobalVariable<float>(timerBBVariable, elapsedTime, blackboardType); }
             else { blackboard.SetVariable<float>(timerBBVariable, elapsedTime); }
             return true; 
         }

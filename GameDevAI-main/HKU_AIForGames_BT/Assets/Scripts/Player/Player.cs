@@ -37,7 +37,7 @@ public class Player : MonoBehaviour, IDamagable
         health -= _damage;
         if(health <= 0) { Die(); }
 
-        GlobalBlackboard.instance.SetGlobalVariable<Transform>("LastKnownAttacker", _attacker.transform, GlobalBlackboardType.ALLY);
+        GlobalBlackboard.instance.SetGlobalVariable<Transform>("LastKnownAttacker", _attacker.transform, BlackboardType.ALLY);
 
         if (attackedCoroutine != null) { attackedTimer = 0f; }
         attackedCoroutine = StartCoroutine(AttackedTimer());
@@ -48,7 +48,7 @@ public class Player : MonoBehaviour, IDamagable
     public IEnumerator AttackedTimer()
     {
         attacked = true;
-        GlobalBlackboard.instance.SetGlobalVariable<bool>("PlayerAttacked", true, GlobalBlackboardType.ALLY);
+        GlobalBlackboard.instance.SetGlobalVariable<bool>("PlayerAttacked", true, BlackboardType.ALLY);
 
         attackedTimer = 0f;
 
@@ -57,7 +57,7 @@ public class Player : MonoBehaviour, IDamagable
             if(attackedTimer >= attackedStateDuration) 
             {
                 attacked = false;
-                GlobalBlackboard.instance.SetGlobalVariable<bool>("PlayerAttacked", false, GlobalBlackboardType.ALLY);
+                GlobalBlackboard.instance.SetGlobalVariable<bool>("PlayerAttacked", false, BlackboardType.ALLY);
                 attackedCoroutine = null;
                 yield return null;
             }
