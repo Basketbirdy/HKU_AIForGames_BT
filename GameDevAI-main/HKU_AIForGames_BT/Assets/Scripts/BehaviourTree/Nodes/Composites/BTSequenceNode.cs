@@ -36,7 +36,7 @@ public class BTSequenceNode : BTCompositeNode
     protected override void OnExit()
     {
         currentIndex = 0;
-        OnReset();
+        //OnReset();
     }
 
     public override void OnReset()

@@ -2128,7 +2128,7 @@ MonoBehaviour:
   detectionMask:
     serializedVersion: 2
     m_Bits: 128
-  detectionDuration: 0
+  detectionDuration: 5
   pickupDuration: 1
   weaponMask:
     serializedVersion: 2

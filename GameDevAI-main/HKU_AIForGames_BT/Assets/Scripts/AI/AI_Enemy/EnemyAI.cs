@@ -61,30 +61,30 @@ public class EnemyAI : MonoBehaviour
 
         behaviourTree =
             new BTSelectorNode(
-
-                new BTSelectorNode(
-
-                    new BTCheckTimestampNode("Player_LastSeen", detectionDuration, BlackboardType.ENEMY),
-
+                new BTCheckTimestampNode("Player_LastSeen", detectionDuration, BlackboardType.ENEMY, TimestampCheck.ISRUNNING,
                     new BTSelectorNode(
                         new BTSequenceNode(
-                            
                             // check for weapon
                             new BTBooleanConditionNode("HasWeapon", true, BlackboardType.LOCAL,
                                 // if this enemy has a weapon
                                 new BTSequenceNode(
                                     new BTChangeDynamicTextNode($"Chasing target"),
-                                    new BTMoveTowardsNode(agent, "Player_LastSeenPosition", speed, attackRange, BlackboardType.ENEMY),
-                                    new BTCheckTimestampNode("AttackCooldown", attackCooldown, BlackboardType.LOCAL),
-                                    new BTDebugLogNode($"ATTACK!!"),
-                                    new BTSetTimestampNode("AttackCooldown", BlackboardType.LOCAL)
+                                    new BTParallelNode(
+                                        new BTCheckTimestampNode("AttackCooldown", attackCooldown, BlackboardType.LOCAL, TimestampCheck.ISFINSIHED,
+                                            new BTSequenceNode(
+                                                new BTDebugLogNode($"ATTACK!!"),
+                                                new BTSetTimestampNode("AttackCooldown", BlackboardType.LOCAL)
+                                                )
+                                            ),
+                                        new BTMoveTowardsNode(agent, "Player_LastSeenPosition", speed, attackRange, BlackboardType.ENEMY)
+                                        )
                                     )
                                 )
                             ),
                         new BTSequenceNode(
                             // find weapon
                             new BTChangeDynamicTextNode($"Finding weapon"),
-                            new BTGetFromListByDistanceNode("Weapon_LocatedList", "Weapon_Target" , BlackboardType.ENEMY, BlackboardType.LOCAL),
+                            new BTGetFromListByDistanceNode("Weapon_LocatedList", "Weapon_Target", BlackboardType.ENEMY, BlackboardType.LOCAL),
                             new BTMoveTowardsNode(agent, "Weapon_Target", speed, keepDistance),
                             new BTDebugLogNode($"Picking up weapon"),
                             new BTSetBlackboardVariableNode<bool>("HasWeapon", true),
@@ -92,10 +92,10 @@ public class EnemyAI : MonoBehaviour
                             )
                         )
                     ),
-                
                 patrolTree
-
                 );
+                
+
 
         mainTree =
             new BTParallelNode(
