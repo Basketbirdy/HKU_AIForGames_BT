@@ -4,7 +4,7 @@ using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : MonoBehaviour, IStatusHaver
 {
     //private BTBaseNode oldTree;
     private BTBaseNode mainTree;
@@ -18,6 +18,9 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float speedMultiplier;
     [SerializeField] private float keepDistance;
 
+    [Header("Status")]
+    [SerializeField] private Dictionary<StatusType, float> statusTimers;
+
     [Header("Target detection")]
     [SerializeField] private float detectionRange;
     [SerializeField] private LayerMask detectionMask;
@@ -30,6 +33,8 @@ public class EnemyAI : MonoBehaviour
     [Header("Attack")]
     [SerializeField] private float attackRange;
     [SerializeField] private float attackCooldown;
+    [SerializeField] private Vector3 attackOffset;
+    [SerializeField] private LayerMask attackMask;
 
     [Header("Patrol")]
     [SerializeField] private float pauseDuration;
@@ -43,6 +48,8 @@ public class EnemyAI : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         globalBlackboards = worldDataManager.GetComponent<IBlackboardHolder>();
+
+        statusTimers = new Dictionary<StatusType, float>();
     }
 
     private void Start()
@@ -50,14 +57,19 @@ public class EnemyAI : MonoBehaviour
         Blackboard bb = new Blackboard();
         // waypoints
         bb.SetVariable<Transform[]>("Waypoints", waypoints);
+        bb.SetVariable<Transform>("CurrentWaypoint", waypoints[0]);
         bb.SetVariable<int>("CurrentWaypointIndex", 0);
         // weapons
         bb.SetVariable<bool>("HasWeapon", false);
 
-        patrolTree =
-            new BTSequenceNode(
-                new BTChangeDynamicTextNode($"State: Patrolling")
-                
+        patrolTree = 
+            new BTCheckTimestampNode("Player_LastSeen", detectionDuration, BlackboardType.ENEMY, TimestampCheck.ISFINISHED, 
+                new BTSequenceNode(
+                    new BTChangeDynamicTextNode($"State: Patrolling"),
+                    new BTSetTargetToWaypointNode("CurrentWaypoint", "Waypoints", "CurrentWaypointIndex"),
+                    new BTMoveTowardsNode(agent, "CurrentWaypoint", speed * .75f, keepDistance),
+                    new BTIncrementIndexNode<Transform>("CurrentWaypointIndex", "Waypoints")
+                    )
                 );
 
         behaviourTree =
@@ -71,9 +83,10 @@ public class EnemyAI : MonoBehaviour
                                 new BTSequenceNode(
                                     new BTChangeDynamicTextNode($"Chasing target"),
                                     new BTParallelNode(
-                                        new BTCheckTimestampNode("AttackCooldown", attackCooldown, BlackboardType.LOCAL, TimestampCheck.ISFINSIHED,
+                                        new BTCheckTimestampNode("AttackCooldown", attackCooldown, BlackboardType.LOCAL, TimestampCheck.ISFINISHED,
                                             new BTSequenceNode(
                                                 new BTDebugLogNode($"ATTACK!!"),
+                                                new BTSimpleMeleeAttackNode(attackRange, 10f, attackOffset, attackMask),
                                                 new BTSetTimestampNode("AttackCooldown", BlackboardType.LOCAL)
                                                 )
                                             ),
@@ -101,7 +114,6 @@ public class EnemyAI : MonoBehaviour
 
         mainTree =
             new BTParallelNode(
-
                 // player in range check
                 new BTSequenceNode(
                     new BTFindObjectNode(detectionRange, detectionMask, "Player_LastSeenPosition", BlackboardType.ENEMY),
@@ -115,7 +127,9 @@ public class EnemyAI : MonoBehaviour
 
                 new BTSequenceNode(
                     //new BTDebugLogNode($"[EnemyAI; {gameObject.name}] Running main behaviour inside parallel node"),
-                    behaviourTree
+                    new BTCheckStatusEffectNode(ref statusTimers, StatusType.BLINDNESS, false,
+                        behaviourTree
+                        )
                     )
                 );
 
@@ -130,63 +144,28 @@ public class EnemyAI : MonoBehaviour
         TaskStatus result = mainTree.Tick();
     }
 
-    //oldTree =
-    //        new BTSelectorNode(
+    public void ApplyStatusEffect(StatusType _status, float _duration)
+    {
+        if (statusTimers.ContainsKey(_status)) 
+        {
+            statusTimers[_status] = Time.time + _duration; 
+            return; 
+        }
 
-    //            new BTTimerConditionNode("PlayerSpottedTimer", detectionDuration, BlackboardType.ENEMY,
-    //                // Do this if timer is running - player is spotted
+        StartCoroutine(StartStatusTimer(_status, _duration));
+    }
 
-    //                new BTSequenceNode(
-    //                    new BTSelectorNode(
-    //                        // check if blackboard has weapon
-    //                        new BTBooleanConditionNode("HasWeapon", true, BlackboardType.GLOBAL,
-    //                            new BTSequenceNode(
-    //                                new BTSelectorNode(
+    public IEnumerator StartStatusTimer(StatusType _type, float _duration)
+    {
+        Debug.Log($"[{gameObject.name}] starting {_type} timer");
+        statusTimers.Add(_type, Time.time + _duration);
 
-    //                                    // TODO - Parallel node
-    //                                    new BTSequenceNode(
-    //                                        new BTFindObjectNode(attackRange, detectionMask),
-    //                                        new BTChangeDynamicTextNode($"State: Attacking player")
-    //                                        ),
+        while (Time.time < statusTimers[_type])
+        {
+            Debug.Log($"[{gameObject.name}] Affected by {_type}");
+            yield return null;
+        }
 
-    //                                    new BTSequenceNode(
-    //                                        new BTChangeDynamicTextNode($"State: Chasing player")
-    //                                        )
-
-    //                                    )
-
-    //                                )
-
-    //                            ),
-
-    //                        // TODO - weapon check stuff
-    //                        new BTSequenceNode(
-    //                            new BTChangeDynamicTextNode($"State: Looking for weapon"),
-    //                            new BTFindObjectNode(detectionRange, weaponMask),
-    //                            new BTChangeDynamicTextNode($"State: Moving to weapon"),
-    //                            new BTMoveTowardsNode(agent, VariableNames.DATA_FOUNDOBJECT, speed, keepDistance),
-    //                            new BTChangeDynamicTextNode($"State: Picking up weapon"),
-    //                            new BTWaitNode(pickupDuration),
-    //                            new BTSetBlackboardVariableNode<bool>("HasWeapon", true)
-    //                            )
-
-    //                        )
-
-    //                    )
-
-    //                ),
-
-    //            new BTSequenceNode(
-
-    //                new BTFindObjectNode(detectionRange, detectionMask),
-    //                new BTSetBlackboardVariableNode<float>("PlayerSpottedTimer", 0f, BlackboardType.ENEMY)
-
-    //                ),
-
-    //            new BTChangeDynamicTextNode($"State: Patrolling")
-
-    //            );
-
-    //    oldTree.SetupSelf(transform);
-    //    oldTree.SetupBlackboard(bb);
+        statusTimers.Remove(_type);
+    }
 }

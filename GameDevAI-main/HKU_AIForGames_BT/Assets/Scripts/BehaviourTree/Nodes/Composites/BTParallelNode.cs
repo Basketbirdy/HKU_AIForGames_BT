@@ -25,6 +25,7 @@ public class BTParallelNode : BTCompositeNode
 
     protected override void OnExit()
     {
+        currentIndex = 0;
         OnReset();
     }
 
@@ -36,7 +37,7 @@ public class BTParallelNode : BTCompositeNode
 
             if(currentIndex != priorityIndex) { continue; }
 
-            //if(result == TaskStatus.RUNNING) { OnReset(); } //// try if tree is not being interupted when something changes
+            if (result == TaskStatus.RUNNING) { currentIndex = 0; } //// try if tree is not being interupted when something changes
 
             return result;
         }

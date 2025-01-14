@@ -11,6 +11,8 @@ public class SmokeCloud : MonoBehaviour, ISetup<Nullable>
 
     [Header("Data")]
     [SerializeField] private float lifetime;
+    [SerializeField] private float blindnessDuration;
+    [SerializeField] private LayerMask smokeMask;
 
     [Header("Animation")]
     [SerializeField] private float amplitude;
@@ -45,5 +47,20 @@ public class SmokeCloud : MonoBehaviour, ISetup<Nullable>
         }
 
         Destroy(gameObject);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        // check if collision is object in smokeMask
+        if((smokeMask.value & (1 << other.transform.gameObject.layer)) > 0)
+        {
+            IStatusHaver target = other.transform.gameObject.GetComponent<IStatusHaver>();
+            if(target == null) 
+            {
+                return; 
+            }
+
+            target.ApplyStatusEffect(StatusType.BLINDNESS, blindnessDuration);
+        }
     }
 }

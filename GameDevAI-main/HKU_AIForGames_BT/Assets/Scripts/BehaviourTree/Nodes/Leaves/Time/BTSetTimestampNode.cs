@@ -19,7 +19,7 @@ public class BTSetTimestampNode : BTBaseNode
         
         if(blackboardType != BlackboardType.LOCAL) { GlobalBlackboard.instance.SetGlobalVariable<float>(timestampBBVariable, timestamp, blackboardType); }
         else { blackboard.SetVariable<float>(timestampBBVariable, timestamp); }
-        Debug.Log($"[BTSetTimestampNode; {self.gameObject.name}] setting '{timestampBBVariable}' to {timestamp}");
+        //Debug.Log($"[BTSetTimestampNode; {self.gameObject.name}] setting '{timestampBBVariable}' to {timestamp}");
 
         return TaskStatus.SUCCESS;
     }

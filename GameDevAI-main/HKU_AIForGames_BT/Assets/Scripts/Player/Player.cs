@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
-public class Player : MonoBehaviour, IDamagable
+public class Player : MonoBehaviour, IDamagable, IStatusHaver
 {
     [Header("Attacked state")]
     [SerializeField] private float attackedStateDuration = 5f;
@@ -37,6 +37,8 @@ public class Player : MonoBehaviour, IDamagable
         health -= _damage;
         if(health <= 0) { Die(); }
 
+        Debug.Log($"[{gameObject.name}] Hit by {_attacker.name} for {_damage} damage");
+
         GlobalBlackboard.instance.SetGlobalVariable<Transform>("LastKnownAttacker", _attacker.transform, BlackboardType.ALLY);
 
         if (attackedCoroutine != null) { attackedTimer = 0f; }
@@ -64,5 +66,10 @@ public class Player : MonoBehaviour, IDamagable
             attackedTimer += Time.deltaTime;
             yield return null;
         }
+    }
+
+    public void ApplyStatusEffect(StatusType _type, float _duration)
+    {
+
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TimestampCheck { ISFINSIHED, ISRUNNING }
+public enum TimestampCheck { ISFINISHED, ISRUNNING }
 public class BTCheckTimestampNode : BTConditionDecoratorNode
 {
     private string timestampBBVariable;
@@ -28,7 +28,7 @@ public class BTCheckTimestampNode : BTConditionDecoratorNode
 
         switch (check)
         {
-            case TimestampCheck.ISFINSIHED:
+            case TimestampCheck.ISFINISHED:
                 if (Time.time >= timestamp + delay) { return true; }
                 else { return false; }
         }
