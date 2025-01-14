@@ -28,14 +28,10 @@ public class AllyAI : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private GameObject worldDataManager;
-    private IBlackboardHolder globalBlackboards;
-
-    private int count = 0;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        globalBlackboards = worldDataManager.GetComponent<IBlackboardHolder>();
     }
 
     void Start()
@@ -48,7 +44,7 @@ public class AllyAI : MonoBehaviour
             new BTSelectorNode(
 
                 // check if leader is being attacked
-                new BTBooleanConditionNode("PlayerAttacked", true, BlackboardType.ALLY,
+                new BTCheckBooleanNode("PlayerAttacked", true, BlackboardType.ALLY,
                     new BTSequenceNode(
                         new BTChangeDynamicTextNode($"State: Looking"),
                         new BTWaitNode(1f),
@@ -75,7 +71,6 @@ public class AllyAI : MonoBehaviour
 
                 );
 
-
         tree.SetupSelf(transform);
         tree.SetupBlackboard(bb);
     }
@@ -83,12 +78,5 @@ public class AllyAI : MonoBehaviour
     void FixedUpdate()
     {
         TaskStatus result = tree.Tick();
-        count++;
-
-        if(count >= 60)
-        {
-            Debug.Log($"tree result: {result.ToString()}");
-            count = 0;
-        }
     }
 }

@@ -29,10 +29,9 @@ public class Smokebomb : MonoBehaviour, ISetup<SmokebombData>
             float distanceTraveled = Vector3.Distance(ghostPosition, origin);
             float maxDistance = Vector3.Distance(origin, target);
             float t = Utils.Remap(distanceTraveled, 0f, maxDistance);
-            Debug.Log($"t = {t}; curve = {curve.Evaluate(t)}");
+            //Debug.Log($"t = {t}; curve = {curve.Evaluate(t)}");
 
             float yOffset = curve.Evaluate(t) * curveAmplitude;
-            Debug.Log($"yOffset: {yOffset}");
 
             Vector3 finalPos = ghostPosition;
             finalPos.y += yOffset;
@@ -44,7 +43,6 @@ public class Smokebomb : MonoBehaviour, ISetup<SmokebombData>
 
         ISetup<Nullable> smokeCloud = Instantiate(smokeCloudPrefab, transform.position, Quaternion.identity).GetComponent<ISetup<Nullable>>();
         smokeCloud.Setup(new Nullable());
-        Debug.Log($"Spawned smokecloud: {smokeCloud.ToString()}");
 
         Destroy(gameObject);
     }

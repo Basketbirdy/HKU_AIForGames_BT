@@ -39,7 +39,7 @@ public class SmokeCloud : MonoBehaviour, ISetup<Nullable>
             timeElapsed += Time.deltaTime;
 
             float scaleOffset = amplitude * Mathf.Sin(2 * Mathf.PI * frequency * (timeElapsed / lifetime));
-            Debug.Log($"Sine: {scaleOffset}");
+            //Debug.Log($"Sine: {scaleOffset}");
 
             transform.localScale = originalScale * (1 + scaleOffset);
 

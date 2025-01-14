@@ -81,11 +81,11 @@ public class EnemyAI : MonoBehaviour, IStatusHaver
                     new BTSelectorNode(
                         new BTSequenceNode(
                             // check for weapon
-                            new BTBooleanConditionNode("HasWeapon", true, BlackboardType.LOCAL,
+                            new BTCheckBooleanNode("HasWeapon", true, BlackboardType.LOCAL,
                                 // if this enemy has a weapon
                                 new BTSequenceNode(
                                     new BTChangeDynamicTextNode($"Chasing target"),
-                                    new BTParallelNode(
+                                    new BTParallelNode(false, 
                                         new BTCheckTimestampNode("AttackCooldown", attackCooldown, BlackboardType.LOCAL, TimestampCheck.ISFINISHED,
                                             new BTSequenceNode(
                                                 new BTDebugLogNode($"ATTACK!!"),
@@ -116,7 +116,7 @@ public class EnemyAI : MonoBehaviour, IStatusHaver
 
 
         mainTree =
-            new BTParallelNode(
+            new BTParallelNode(true, 
                 // player in range check
                 new BTSequenceNode(
                     new BTFindObjectNode(detectionRange, detectionMask, "Player_LastSeenPosition", BlackboardType.ENEMY),
@@ -160,12 +160,11 @@ public class EnemyAI : MonoBehaviour, IStatusHaver
 
     public IEnumerator StartStatusTimer(StatusType _type, float _duration)
     {
-        Debug.Log($"[{gameObject.name}] starting {_type} timer");
         statusTimers.Add(_type, Time.time + _duration);
 
         while (Time.time < statusTimers[_type])
         {
-            Debug.Log($"[{gameObject.name}] Affected by {_type}");
+            //Debug.Log($"[{gameObject.name}] Affected by {_type}");
             yield return null;
         }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BTFloatConditionNode : BTConditionDecoratorNode
+public class BTCheckFloatNode : BTConditionalDecoratorNode
 {
     private string valueBBVariable;
     private float compareValue;
@@ -11,7 +11,7 @@ public class BTFloatConditionNode : BTConditionDecoratorNode
 
     private BlackboardType blackboardType;
 
-    public BTFloatConditionNode(string _valueBBVariable, float _compareValue, ConditionalCheckType _conditionalCheckType, BlackboardType _blackboardType, BTBaseNode _child) : base(_child)
+    public BTCheckFloatNode(string _valueBBVariable, float _compareValue, ConditionalCheckType _conditionalCheckType, BlackboardType _blackboardType, BTBaseNode _child) : base(_child)
     {
         valueBBVariable = _valueBBVariable;
         compareValue = _compareValue;

@@ -20,7 +20,6 @@ public class BTIncrementIndexNode<T> : BTBaseNode
 
         int newIndex = (index + 1) % length;
         blackboard.SetVariable<int>(currentIndexVariableName, newIndex);
-        Debug.Log($"new index: {newIndex}");
 
         return TaskStatus.SUCCESS;
     }

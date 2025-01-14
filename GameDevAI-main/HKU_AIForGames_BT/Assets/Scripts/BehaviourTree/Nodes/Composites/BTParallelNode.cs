@@ -11,11 +11,14 @@ public class BTParallelNode : BTCompositeNode
     private int currentIndex;
     private int priorityIndex;
 
-    public BTParallelNode(params BTBaseNode[] _children) : base(_children) 
+    private bool resetOnRunning;
+
+    public BTParallelNode(bool _resetOnRunning = false, params BTBaseNode[] _children) : base(_children) 
     {
         //priorityIndex = _priorityIndex;
         //if(priorityIndex == 0) { priorityIndex = children.Length - 1; }
         priorityIndex = children.Length - 1;
+        resetOnRunning = _resetOnRunning;
     }
 
     protected override void OnEnter()
@@ -37,7 +40,7 @@ public class BTParallelNode : BTCompositeNode
 
             if(currentIndex != priorityIndex) { continue; }
 
-            if (result == TaskStatus.RUNNING) { currentIndex = 0; } //// try if tree is not being interupted when something changes
+            if (resetOnRunning && result == TaskStatus.RUNNING) { currentIndex = 0; } //// try if tree is not being interupted when something changes
 
             return result;
         }

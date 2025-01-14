@@ -37,7 +37,7 @@ public class Player : MonoBehaviour, IDamagable, IStatusHaver
         health -= _damage;
         if(health <= 0) { Die(); }
 
-        Debug.Log($"[{gameObject.name}] Hit by {_attacker.name} for {_damage} damage");
+        //Debug.Log($"[{gameObject.name}] Hit by {_attacker.name} for {_damage} damage");
 
         GlobalBlackboard.instance.SetGlobalVariable<Transform>("LastKnownAttacker", _attacker.transform, BlackboardType.ALLY);
 

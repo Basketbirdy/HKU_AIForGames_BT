@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
-public class BTTimerConditionNode : BTConditionDecoratorNode
+public class BTCheckTimerNode : BTConditionalDecoratorNode
 {
     private string timerBBVariable;
     private float timerDuration;
 
     private BlackboardType blackboardType;
 
-    public BTTimerConditionNode(string _timerBBVariable, float _timerDuration, BlackboardType _blackboardType, BTBaseNode _child) : base(_child) 
+    public BTCheckTimerNode(string _timerBBVariable, float _timerDuration, BlackboardType _blackboardType, BTBaseNode _child) : base(_child) 
     {
         timerBBVariable = _timerBBVariable;
         timerDuration = _timerDuration;
@@ -34,11 +34,5 @@ public class BTTimerConditionNode : BTConditionDecoratorNode
             else { blackboard.SetVariable<float>(timerBBVariable, elapsedTime); }
             return true; 
         }
-    }
-
-    public override void OnReset()
-    {
-        //if (global) { GlobalBlackboard.instance.SetGlobalVariable<float>(timerBBVariable, 0, globalBlackboard); }
-        //else { blackboard.SetVariable<float>(timerBBVariable, 0); }
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BTCheckStatusEffectNode : BTConditionDecoratorNode
+public class BTCheckStatusEffectNode : BTConditionalDecoratorNode
 {
     private Dictionary<StatusType, float> activeEffects;
     private StatusType type;
@@ -18,10 +18,9 @@ public class BTCheckStatusEffectNode : BTConditionDecoratorNode
 
     protected override bool TryCondition()
     {
-        Debug.Log("-------------");
         if (activeEffects.ContainsKey(type)) 
         {
-            Debug.Log($"Is affected by {type}");
+            //Debug.Log($"Is affected by {type}");
 
             if (isActive) { return true; }
             return false;

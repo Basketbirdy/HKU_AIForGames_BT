@@ -38,7 +38,7 @@ public class OldAllyAI : MonoBehaviour
 
         allyTree =
             new BTSelectorNode(
-                new BTBooleanConditionNode(VariableNames.DATA_GETTINGATTACKED, true, BlackboardType.ALLY,
+                new BTCheckBooleanNode(VariableNames.DATA_GETTINGATTACKED, true, BlackboardType.ALLY,
                     new BTSequenceNode(
                         new BTFindObjectNode(visionRange, coverMask),
                         new BTTargetWithinDistanceNode(VariableNames.DATA_FOUNDOBJECT, interactRange, ConditionalCheckType.GreaterThanOrEqual,        //change second transform into the transform of the cover

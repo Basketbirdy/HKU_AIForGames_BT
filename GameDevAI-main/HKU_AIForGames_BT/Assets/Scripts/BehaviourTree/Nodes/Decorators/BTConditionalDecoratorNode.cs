@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BTConditionDecoratorNode : BTDecoratorNode
+public abstract class BTConditionalDecoratorNode : BTDecoratorNode
 {
-    public BTConditionDecoratorNode(BTBaseNode _child) : base(_child) { }
+    public BTConditionalDecoratorNode(BTBaseNode _child) : base(_child) { }
 
     protected override TaskStatus OnUpdate()
     {

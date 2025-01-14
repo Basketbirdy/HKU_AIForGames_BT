@@ -10,7 +10,7 @@ public enum ConditionalCheckType
     LessThanOrEqual,
     Equal,
 }
-public class BTTargetWithinDistanceNode : BTConditionDecoratorNode
+public class BTTargetWithinDistanceNode : BTConditionalDecoratorNode
 {
     private string targetBBVariable;
     private float range;
@@ -49,8 +49,6 @@ public class BTTargetWithinDistanceNode : BTConditionDecoratorNode
                 break;
         }
 
-        //Debug.Log($"Condition distance: {distance}");
-        //Debug.Log($"Tried condition: {state}");
         return state;
     }
 }

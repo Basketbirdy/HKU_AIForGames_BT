@@ -36,7 +36,6 @@ public class BTAddToListNode<T> : BTBaseNode
         else { value = blackboard.GetVariable<T>(valueBBVariable); }
 
         if (list.Contains(value)) { return TaskStatus.FAILURE; }
-        //Debug.Log($"[BTAddToListNode; {self.gameObject.name}] adding '{value}' to the '{listBBVariable}' list");
         list.Add(value);
 
         if (listBlackboardType != BlackboardType.LOCAL) { GlobalBlackboard.instance.SetGlobalVariable<List<T>>(listBBVariable, list, listBlackboardType); }

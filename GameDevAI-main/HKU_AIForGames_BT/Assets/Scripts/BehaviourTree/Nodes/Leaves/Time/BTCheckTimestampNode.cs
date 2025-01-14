@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum TimestampCheck { ISFINISHED, ISRUNNING }
-public class BTCheckTimestampNode : BTConditionDecoratorNode
+public class BTCheckTimestampNode : BTConditionalDecoratorNode
 {
     private string timestampBBVariable;
     private float delay;

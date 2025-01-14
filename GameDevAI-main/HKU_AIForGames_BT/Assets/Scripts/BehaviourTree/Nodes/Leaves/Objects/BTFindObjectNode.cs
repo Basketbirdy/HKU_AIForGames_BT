@@ -26,7 +26,7 @@ public class BTFindObjectNode : BTBaseNode
     protected override TaskStatus OnUpdate()
     {
         Collider[] colliders = Physics.OverlapSphere(self.position, range, checkMask);
-        Debug.Log($"Checking for object in range, range: {storageBBVariable}");
+        //Debug.Log($"Checking for object in range, range: {storageBBVariable}");
 
         string storage = VariableNames.DATA_FOUNDOBJECT;
         if(storageBBVariable != "") { storage = storageBBVariable; }
@@ -36,15 +36,9 @@ public class BTFindObjectNode : BTBaseNode
             return TaskStatus.FAILURE; 
         }
 
-        Debug.Log($"Found object in range: {colliders[0].gameObject.name}");
+        //Debug.Log($"Found object in range: {colliders[0].gameObject.name}");
         if (blackboardType != BlackboardType.LOCAL) { GlobalBlackboard.instance.SetGlobalVariable<Transform>(storage, colliders[0].transform, blackboardType); }
         else { blackboard.SetVariable<Transform>(storage, colliders[0].transform); }
         return TaskStatus.SUCCESS;
-    }
-
-    public override void OnReset()
-    {
-        //if (blackboardType != BlackboardType.LOCAL) { GlobalBlackboard.instance.SetGlobalVariable<Transform>(storageBBVariable, null, blackboardType); }
-        //else { blackboard.SetVariable<Transform>(storageBBVariable, null); }
     }
 }

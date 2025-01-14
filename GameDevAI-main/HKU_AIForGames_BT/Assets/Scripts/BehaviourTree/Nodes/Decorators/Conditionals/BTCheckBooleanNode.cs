@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BTBooleanConditionNode : BTConditionDecoratorNode
+public class BTCheckBooleanNode : BTConditionalDecoratorNode
 {
     string variableName;
     bool variable;
@@ -11,7 +11,7 @@ public class BTBooleanConditionNode : BTConditionDecoratorNode
 
     BlackboardType blackboardType;
 
-    public BTBooleanConditionNode(string _variableName, bool _compareValue, BlackboardType _blackboardType, BTBaseNode _child) : base(_child) 
+    public BTCheckBooleanNode(string _variableName, bool _compareValue, BlackboardType _blackboardType, BTBaseNode _child) : base(_child) 
     {
         variableName = _variableName;
         compareValue = _compareValue;
@@ -19,7 +19,7 @@ public class BTBooleanConditionNode : BTConditionDecoratorNode
         blackboardType = _blackboardType;
     }
 
-    public BTBooleanConditionNode(bool _variable, bool _compareValue, BlackboardType _blackboardType, BTBaseNode _child) : base(_child)
+    public BTCheckBooleanNode(bool _variable, bool _compareValue, BlackboardType _blackboardType, BTBaseNode _child) : base(_child)
     {
         variable = _variable;
         compareValue = _compareValue;
