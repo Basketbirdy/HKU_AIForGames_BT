@@ -68,7 +68,10 @@ public class EnemyAI : MonoBehaviour, IStatusHaver
                     new BTChangeDynamicTextNode($"State: Patrolling"),
                     new BTSetTargetToWaypointNode("CurrentWaypoint", "Waypoints", "CurrentWaypointIndex"),
                     new BTMoveTowardsNode(agent, "CurrentWaypoint", speed * .75f, keepDistance),
-                    new BTIncrementIndexNode<Transform>("CurrentWaypointIndex", "Waypoints")
+                    new BTIncrementIndexNode<Transform>("CurrentWaypointIndex", "Waypoints"),
+                    
+                    new BTChangeDynamicTextNode($"State: Waiting"),
+                    new BTWaitNode(3f)
                     )
                 );
 

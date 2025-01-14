@@ -54,7 +54,7 @@ public class AllyAI : MonoBehaviour
                         new BTWaitNode(1f),
                         new BTChangeDynamicTextNode($"State: Moving to cover"),
                         new BTFindObjectNode(visionRange, coverMask),
-                        new BTMoveTowardsNode(agent, VariableNames.DATA_FOUNDOBJECT, speed, keepDistance),
+                        new BTMoveTowardsNode(agent, VariableNames.DATA_FOUNDOBJECT, speed, 1.5f),
                         new BTWaitNode(.5f),
                         new BTChangeDynamicTextNode($"State: Throwing"),
                         new BTInstantiateNode<SmokebombData>("ThrowOrigin", Vector3.zero, smokeBombPrefab, smokeBombData),
