@@ -29,7 +29,7 @@ public class BTCheckTimestampNode : BTConditionDecoratorNode
         switch (check)
         {
             case TimestampCheck.ISFINSIHED:
-                if (Time.time >= timestamp + delay || timestamp == 0) { return true; }
+                if (Time.time >= timestamp + delay) { return true; }
                 else { return false; }
         }
 

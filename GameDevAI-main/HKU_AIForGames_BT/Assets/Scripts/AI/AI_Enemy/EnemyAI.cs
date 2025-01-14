@@ -57,6 +57,7 @@ public class EnemyAI : MonoBehaviour
         patrolTree =
             new BTSequenceNode(
                 new BTChangeDynamicTextNode($"State: Patrolling")
+                
                 );
 
         behaviourTree =
@@ -88,6 +89,7 @@ public class EnemyAI : MonoBehaviour
                             new BTMoveTowardsNode(agent, "Weapon_Target", speed, keepDistance),
                             new BTDebugLogNode($"Picking up weapon"),
                             new BTSetBlackboardVariableNode<bool>("HasWeapon", true),
+                            new BTInteractNode("Weapon_Target"),
                             new BTRemoveFromListNode<Transform>("Weapon_LocatedList", "Weapon_Target", BlackboardType.ENEMY, BlackboardType.LOCAL)
                             )
                         )
