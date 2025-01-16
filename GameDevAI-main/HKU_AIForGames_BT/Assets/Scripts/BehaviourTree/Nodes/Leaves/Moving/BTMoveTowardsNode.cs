@@ -35,11 +35,6 @@ public class BTMoveTowardsNode : BTBaseNode
         else { target = blackboard.GetVariable<Transform>(targetBBVariable); }
     }
 
-    protected override void OnExit()
-    {
-
-    }
-
     protected override TaskStatus OnUpdate()
     {
         if(agent == null) { return TaskStatus.FAILURE; }

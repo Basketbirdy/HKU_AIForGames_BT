@@ -33,16 +33,6 @@ public class BTInstantiateNode<T> : BTBaseNode where T : struct
         parent = _parent;
     }
 
-    protected override void OnEnter()
-    {
-
-    }
-
-    protected override void OnExit()
-    {
-
-    }
-
     protected override TaskStatus OnUpdate()
     {
         if(obj == null) { return TaskStatus.FAILURE; }
@@ -56,10 +46,5 @@ public class BTInstantiateNode<T> : BTBaseNode where T : struct
         if(setup != null) { setup.Setup(setupData); }
 
         return TaskStatus.SUCCESS;
-    }
-
-    public override void OnReset()
-    {
-
     }
 }

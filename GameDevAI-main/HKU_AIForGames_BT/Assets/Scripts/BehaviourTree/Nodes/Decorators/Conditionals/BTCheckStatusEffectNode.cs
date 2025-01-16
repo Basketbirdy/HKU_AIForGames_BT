@@ -6,14 +6,14 @@ public class BTCheckStatusEffectNode : BTConditionalDecoratorNode
 {
     private Dictionary<StatusType, float> activeEffects;
     private StatusType type;
-    private bool isActive;
+    private bool ifIsActive;
 
-    public BTCheckStatusEffectNode(ref Dictionary<StatusType, float> _activeEffects, StatusType _type, bool _isActive, BTBaseNode _child) : base(_child)
+    public BTCheckStatusEffectNode(ref Dictionary<StatusType, float> _activeEffects, StatusType _type, bool _ifIsActive, BTBaseNode _child) : base(_child)
     {
         activeEffects = _activeEffects;
         type = _type;
 
-        isActive = _isActive;
+        ifIsActive = _ifIsActive;
     }
 
     protected override bool TryCondition()
@@ -22,12 +22,12 @@ public class BTCheckStatusEffectNode : BTConditionalDecoratorNode
         {
             //Debug.Log($"Is affected by {type}");
 
-            if (isActive) { return true; }
+            if (ifIsActive) { return true; }
             return false;
         }
         else 
         {
-            if (isActive) { return false; }
+            if (ifIsActive) { return false; }
             return true; 
         }
     }

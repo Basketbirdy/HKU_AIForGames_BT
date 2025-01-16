@@ -27,16 +27,6 @@ public class BTSucceederNode : BTDecoratorNode
         return result;
     }
 
-    protected override void OnEnter()
-    {
-
-    }
-
-    protected override void OnExit()
-    {
-
-    }
-
     public override void OnReset()
     {
         child.OnReset();
