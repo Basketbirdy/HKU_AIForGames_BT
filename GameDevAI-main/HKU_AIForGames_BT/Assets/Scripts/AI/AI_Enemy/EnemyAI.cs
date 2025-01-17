@@ -28,6 +28,7 @@ public class EnemyAI : MonoBehaviour, IStatusHaver
 
     [Header("Weapon detection")]
     [SerializeField] private float pickupDuration;
+    [SerializeField] private GameObject weaponGraphics;
     [SerializeField] private LayerMask weaponMask;
 
     [Header("Attack")]
@@ -56,6 +57,7 @@ public class EnemyAI : MonoBehaviour, IStatusHaver
         bb.SetVariable<int>("CurrentWaypointIndex", 0);
         // weapons
         bb.SetVariable<bool>("HasWeapon", false);
+        bb.SetVariable<GameObject>("WeaponGraphics", weaponGraphics);
 
         patrolTree = 
             new BTCheckTimestampNode("Player_LastSeen", detectionDuration, BlackboardType.ENEMY, TimestampCheck.ISFINISHED, 
@@ -98,6 +100,7 @@ public class EnemyAI : MonoBehaviour, IStatusHaver
                             new BTMoveTowardsNode(agent, "Weapon_Target", speed, keepDistance),
                             new BTDebugLogNode($"Picking up weapon"),
                             new BTSetBlackboardVariableNode<bool>("HasWeapon", true),
+                            new BTEnableGameObjectNode("WeaponGraphics", true, BlackboardType.LOCAL),
                             new BTInteractNode("Weapon_Target"),
                             new BTRemoveFromListNode<Transform>("Weapon_LocatedList", "Weapon_Target", BlackboardType.ENEMY, BlackboardType.LOCAL)
                             )
