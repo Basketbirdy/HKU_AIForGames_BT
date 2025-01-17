@@ -40,14 +40,9 @@ public class EnemyAI : MonoBehaviour, IStatusHaver
     [SerializeField] private float pauseDuration;
     [SerializeField] private Transform[] waypoints;
 
-    [Header("References")]
-    [SerializeField] private GameObject worldDataManager;
-    private IBlackboardHolder globalBlackboards;
-
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        globalBlackboards = worldDataManager.GetComponent<IBlackboardHolder>();
 
         statusTimers = new Dictionary<StatusType, float>();
     }
@@ -79,28 +74,26 @@ public class EnemyAI : MonoBehaviour, IStatusHaver
             new BTSelectorNode(
                 new BTCheckTimestampNode("Player_LastSeen", detectionDuration, BlackboardType.ENEMY, TimestampCheck.ISRUNNING,
                     new BTSelectorNode(
-                        new BTSequenceNode(
-                            // check for weapon
-                            new BTCheckBooleanNode("HasWeapon", true, BlackboardType.LOCAL,
-                                // if this enemy has a weapon
-                                new BTSequenceNode(
-                                    new BTChangeDynamicTextNode($"Chasing target"),
-                                    new BTParallelNode(false, 
-                                        new BTCheckTimestampNode("AttackCooldown", attackCooldown, BlackboardType.LOCAL, TimestampCheck.ISFINISHED,
-                                            new BTSequenceNode(
-                                                new BTDebugLogNode($"ATTACK!!"),
-                                                new BTSimpleMeleeAttackNode(attackRange, 10f, attackOffset, attackMask),
-                                                new BTSetTimestampNode("AttackCooldown", BlackboardType.LOCAL)
-                                                )
-                                            ),
-                                        new BTMoveTowardsNode(agent, "Player_LastSeenPosition", speed, attackRange, BlackboardType.ENEMY)
-                                        )
+                        // check for weapon
+                        new BTCheckBooleanNode("HasWeapon", true, BlackboardType.LOCAL,
+                            // if this enemy has a weapon
+                            new BTSequenceNode(
+                                new BTChangeDynamicTextNode($"State: Chasing"),
+                                new BTParallelNode(false, 
+                                    new BTCheckTimestampNode("AttackCooldown", attackCooldown, BlackboardType.LOCAL, TimestampCheck.ISFINISHED,
+                                        new BTSequenceNode(
+                                            new BTDebugLogNode($"ATTACK!!"),
+                                            new BTSimpleMeleeAttackNode(attackRange, 10f, attackOffset, attackMask),
+                                            new BTSetTimestampNode("AttackCooldown", BlackboardType.LOCAL)
+                                            )
+                                        ),
+                                    new BTMoveTowardsNode(agent, "Player_LastSeenPosition", speed, attackRange, BlackboardType.ENEMY)
                                     )
                                 )
                             ),
                         new BTSequenceNode(
                             // find weapon
-                            new BTChangeDynamicTextNode($"Finding weapon"),
+                            new BTChangeDynamicTextNode($"State: Finding weapon"),
                             new BTGetFromListByDistanceNode("Weapon_LocatedList", "Weapon_Target", BlackboardType.ENEMY, BlackboardType.LOCAL),
                             new BTMoveTowardsNode(agent, "Weapon_Target", speed, keepDistance),
                             new BTDebugLogNode($"Picking up weapon"),
